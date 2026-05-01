@@ -1,0 +1,64 @@
+<TechnologyStack VERSION="0.2.0">
+  <Runtime>.NET 9.0</Runtime>
+  <Language>C# 13</Language>
+  <Framework>ASP.NET Core 9.0</Framework>
+
+  <Dependencies>
+    <dep name="WolverineFx" version="3.x" purpose="CQRS command/event bus, saga for user provisioning and role sync (Worker only)" />
+    <dep name="Dapr.Client" version="1.15.x" purpose="Pub/sub for Writer→MQ→Worker" />
+    <dep name="FluentValidation" version="12.x" purpose="User DTO validation" />
+    <dep name="MongoDB.Driver" version="3.x" purpose="User/role cache, saga state" />
+    <dep name="Keycloak.Net" version="latest" purpose="Keycloak admin API client" />
+    <dep name="System.IdentityModel.Tokens.Jwt" version="8.x" purpose="JWT validation, JWKS cache" />
+    <dep name="Serilog" version="4.x" purpose="Structured logging with PII redaction" />
+  </Dependencies>
+
+  <VersionConstraints>
+    <constraint lib="WolverineFx" min="3.0.0" max="3.x" reason=".NET 9 support" />
+    <constraint lib="Dapr.Client" min="1.15.0" max="1.15.x" reason=".NET 9 LTS" />
+  </VersionConstraints>
+
+  <Tooling>
+    <tool name="build" value="dotnet build" version="9.0" />
+    <tool name="test-runner" value="dotnet test" version="9.0" />
+    <tool name="linter" value="dotnet format" version="9.0" />
+    <tool name="orchestration" value="Dapr + Kubernetes" version="1.15" />
+  </Tooling>
+
+  <PreferredAgentStack>
+    <preferred-read-api>ASP.NET Core controllers for MongoDB user/role cache queries (stateless)</preferred-read-api>
+    <preferred-write-gateway>ASP.NET Core controllers routing user commands to Dapr pub/sub (async, 202)</preferred-write-gateway>
+    <preferred-message-bus>WolverineFx (Dapr pub/sub, Worker only)</preferred-message-bus>
+    <preferred-persistence>MongoDB (user cache, role cache, saga state)</preferred-persistence>
+    <preferred-identity-client>Keycloak.Net (admin API) + System.IdentityModel.Tokens.Jwt (JWT validation)</preferred-identity-client>
+    <preferred-test-library>xUnit.net + FakeItEasy</preferred-test-library>
+    <preferred-observability>Serilog (structured JSON, PII redaction)</preferred-observability>
+  </PreferredAgentStack>
+
+  <Testing>
+    <module-level>
+      <command>dotnet test tests/IdentityService.<Module>.UnitTests/</command>
+      <focus>Fast unit checks</focus>
+    </module-level>
+    <wave-level>
+      <command>dotnet test tests/IdentityService.IntegrationTests/ --filter "Category=Wave"</command>
+      <focus>Bottom-up: MongoDB → Reader (cache queries) + Writer (command routing) → Worker (saga + Keycloak sync)</focus>
+    </wave-level>
+    <phase-level>
+      <command>dotnet test</command>
+      <focus>Full regression including compensation and cache invalidation</focus>
+    </phase-level>
+    <mocking-policy>FakeItEasy for Keycloak client; Testcontainers.MongoDB for integration; in-memory Wolverine bus for units</mocking-policy>
+  </Testing>
+
+  <Observability>
+    <logger>Serilog (structured JSON)</logger>
+    <log-format>[ModuleName][functionName][BLOCK_NAME] message {correlationId} {userId} {realm}</log-format>
+    <required-fields>correlationId, userId, realm</required-fields>
+    <redaction>Never log email, phone, tokens, passwords, or PII. Redact at Serilog enricher.</redaction>
+  </Observability>
+
+  <DeliveryShape>
+    <shape>K8s: Reader Deployment (3+ replicas, query-only), Writer Deployment (3+ replicas, command gateway), Worker Deployment (3+ replicas, saga processor). Dapr sidecar in each pod. MongoDB StatefulSet. Keycloak external managed service. GitOps-driven deploy.</shape>
+  </DeliveryShape>
+</TechnologyStack>

@@ -1,0 +1,181 @@
+<VerificationPlan VERSION="0.2.0">
+  <GlobalPolicy>
+    <log-format>[ModuleName][functionName][BLOCK_NAME] message {correlationId} {userId} {realm}</log-format>
+    <deterministic-first>true</deterministic-first>
+    <module-level-focus>Fast unit checks: DTO validation, MongoDB query logic, saga state transitions, Keycloak adapter</module-level-focus>
+    <wave-level-focus>Bottom-up: MongoDB → Reader queries → Writer command publish → Worker saga + Keycloak sync</wave-level-focus>
+    <phase-level-focus>Full regression: all unit + integration + DLQ failure handling + idempotency replay + cache consistency</phase-level-focus>
+    <autonomy-gate>Each shared module needs commands, scenarios, evidence, and wave/phase follow-up</autonomy-gate>
+    <redaction>Never log email, phone, tokens, passwords, or PII. Redact at Serilog enricher level.</redaction>
+  </GlobalPolicy>
+
+  <CriticalFlows>
+    <VF-001 NAME="UserProvisioningHappy" USE_CASES="UC-001" DATA_FLOW="DF-USER-PROVISION" PRIORITY="critical">
+      <scenario>User provisioning saga flows: Writer → MQ → Worker → Keycloak + cache → UserProvisioned event</scenario>
+      <expected-outcome>User created in Keycloak, cached in MongoDB, saga state=Provisioned, UserProvisioned event emitted</expected-outcome>
+      <required-signals>
+        <log-marker>[IdentityService.Api.WriterService][PostCreateUser][BLOCK_PUBLISH_COMMAND]</log-marker>
+        <log-marker>[IdentityService.WorkerService][ProvisionUserHandler][BLOCK_SAGA_START]</log-marker>
+        <log-marker>[IdentityService.KeycloakAdapter][CreateUserInKeycloak][BLOCK_KEYCLOAK_API_CALL]</log-marker>
+        <log-marker>[IdentityService.CacheLayer][UpdateUserCache][BLOCK_CACHE_UPDATE]</log-marker>
+        <trace-sequence>BLOCK_PUBLISH_COMMAND → BLOCK_SAGA_START → BLOCK_KEYCLOAK_API_CALL → BLOCK_CACHE_UPDATE</trace-sequence>
+      </required-signals>
+    </VF-001>
+
+    <VF-002 NAME="UserQueryFast" USE_CASES="UC-002" DATA_FLOW="DF-QUERY-USER" PRIORITY="critical">
+      <scenario>User query via Reader API from MongoDB cache only (no Keycloak fallback)</scenario>
+      <expected-outcome>Response latency ≤50ms p95 (cache hit), correct user document returned or 404</expected-outcome>
+      <required-signals>
+        <log-marker>[IdentityService.Api.ReaderService][GetUser][BLOCK_QUERY_CACHE]</log-marker>
+      </required-signals>
+    </VF-002>
+
+    <VF-003 NAME="SagaDLQOnFailure" USE_CASES="UC-001" DATA_FLOW="DF-USER-PROVISION" PRIORITY="critical">
+      <scenario>Provisioning fails at any step (Keycloak API down, network timeout, validation error)</scenario>
+      <expected-outcome>Saga fails gracefully, FailedIdentityEvent published to DLQ with full context (original request, failed step, error), NO compensation, state preserved for investigation</expected-outcome>
+      <required-signals>
+        <log-marker>[IdentityService.WorkerService][ProvisionUserSaga][BLOCK_SAGA_FAILURE]</log-marker>
+        <log-marker>[IdentityService.WorkerService][DLQHandler][BLOCK_PUBLISH_DLQ]</log-marker>
+      </required-signals>
+    </VF-003>
+
+    <VF-004 NAME="TokenIntrospection" USE_CASES="UC-002" DATA_FLOW="DF-QUERY-USER" PRIORITY="high">
+      <scenario>POST /api/introspect validates JWT against JWKS cache (in-memory, no MongoDB)</scenario>
+      <expected-outcome>Valid token returns user claims, invalid token returns 401, JWKS cache refreshes on expiry</expected-outcome>
+      <required-signals>
+        <log-marker>[IdentityService.Api.ReaderService][PostIntrospect][BLOCK_TOKEN_VALIDATE]</log-marker>
+        <log-marker>[IdentityService.KeycloakAdapter][ValidateToken][BLOCK_JWKS_CACHE_CHECK]</log-marker>
+      </required-signals>
+    </VF-004>
+  </CriticalFlows>
+
+  <ModuleVerification>
+    <V-M-SHARED MODULE="M-SHARED" PRIORITY="high">
+      <test-files>
+        <file>tests/IdentityService.Shared.UnitTests/</file>
+      </test-files>
+      <module-checks>
+        <check-1>dotnet test tests/IdentityService.Shared.UnitTests/</check-1>
+        <check-2>All DTOs, events, commands deserialize/serialize correctly</check-2>
+      </module-checks>
+      <scenarios>
+        <scenario-1 kind="success">UserCreatedDto deserialized from JSON</scenario-1>
+        <scenario-2 kind="failure">Invalid JSON rejected with validation errors</scenario-2>
+      </scenarios>
+      <wave-follow-up>DTOs used consistently across Reader, Writer, Worker</wave-follow-up>
+      <phase-follow-up>None (static contracts)</phase-follow-up>
+    </V-M-SHARED>
+
+    <V-M-READER MODULE="M-READER" PRIORITY="high">
+      <test-files>
+        <file>tests/IdentityService.Api.ReaderService.UnitTests/</file>
+      </test-files>
+      <module-checks>
+        <check-1>dotnet test tests/IdentityService.Api.ReaderService.UnitTests/</check-1>
+        <check-2>GET /api/users/{id} returns user or 404 (from cache only)</check-2>
+        <check-3>POST /api/introspect validates JWT against JWKS cache</check-3>
+      </module-checks>
+      <scenarios>
+        <scenario-1 kind="success">Cache hit: query returns user, ≤10ms</scenario-1>
+        <scenario-2 kind="failure">Cache miss: query returns 404 (NO Keycloak fallback)</scenario-2>
+        <scenario-3 kind="success">Token introspection: valid JWT validated, ≤1ms</scenario-3>
+        <scenario-4 kind="failure">Token introspection: expired JWT rejected</scenario-4>
+      </scenarios>
+      <required-log-markers>
+        <marker-1>[IdentityService.Api.ReaderService][GetUser][BLOCK_QUERY_CACHE]</marker-1>
+        <marker-2>[IdentityService.Api.ReaderService][PostIntrospect][BLOCK_TOKEN_VALIDATE]</marker-2>
+      </required-log-markers>
+      <wave-follow-up>Integration: Reader → MongoDB queries correct documents</wave-follow-up>
+      <phase-follow-up>Load test: 500+ queries/s, p99 ≤50ms</phase-follow-up>
+    </V-M-READER>
+
+    <V-M-WRITER MODULE="M-WRITER" PRIORITY="high">
+      <test-files>
+        <file>tests/IdentityService.Api.WriterService.UnitTests/</file>
+      </test-files>
+      <module-checks>
+        <check-1>dotnet test tests/IdentityService.Api.WriterService.UnitTests/</check-1>
+        <check-2>Writer POST endpoints validate, publish to MQ, return 202</check-2>
+      </module-checks>
+      <scenarios>
+        <scenario-1 kind="success">Valid user create command → 202 Accepted + correlationId → message published to MQ (partition key: userId)</scenario-1>
+        <scenario-2 kind="failure">Invalid payload → 400 with validation errors</scenario-2>
+      </scenarios>
+      <required-log-markers>
+        <marker-1>[IdentityService.Api.WriterService][PostCreateUser][BLOCK_PUBLISH_COMMAND]</marker-1>
+      </required-log-markers>
+      <wave-follow-up>Integration: Writer → Dapr pub/sub (in-memory stub) → Worker receives command</wave-follow-up>
+      <phase-follow-up>Load test: 500 POST/s, verify partition key routing by userId</phase-follow-up>
+    </V-M-WRITER>
+
+    <V-M-WORKER MODULE="M-WORKER" PRIORITY="critical">
+      <test-files>
+        <file>tests/IdentityService.WorkerService.UnitTests/</file>
+      </test-files>
+      <module-checks>
+        <check-1>dotnet test tests/IdentityService.WorkerService.UnitTests/</check-1>
+        <check-2>ProvisionUserSaga happy path: Keycloak create → cache update → saga state=Provisioned</check-2>
+        <check-3>DLQ on failure: FailedIdentityEvent published with original request + error context</check-3>
+        <check-4>Idempotency: replay skips completed steps</check-4>
+      </module-checks>
+      <scenarios>
+        <scenario-1 kind="success">Valid command → saga completes, UserProvisioned event emitted, cache populated</scenario-1>
+        <scenario-2 kind="failure">Keycloak API fails → BLOCK_SAGA_FAILURE, publish to DLQ (NO compensation)</scenario-2>
+        <scenario-3 kind="replay">Replayed after partial progress → idempotency check skips already-completed steps</scenario-3>
+      </scenarios>
+      <required-log-markers>
+        <marker-1>[IdentityService.WorkerService][ProvisionUserHandler][BLOCK_SAGA_START]</marker-1>
+        <marker-2>[IdentityService.WorkerService][ProvisionUserSaga][BLOCK_IDEMPOTENCY_CHECK]</marker-2>
+        <marker-3>[IdentityService.WorkerService][ProvisionUserSaga][BLOCK_SAGA_FAILURE]</marker-3>
+        <marker-4>[IdentityService.WorkerService][DLQHandler][BLOCK_PUBLISH_DLQ]</marker-4>
+      </required-log-markers>
+      <wave-follow-up>Integration: real MongoDB + real Keycloak stub (TestContainers/Mock), full saga flow + DLQ</wave-follow-up>
+      <phase-follow-up>Chaos test: kill Worker pod, verify saga resumes from idempotency ledger</phase-follow-up>
+    </V-M-WORKER>
+
+    <V-M-KEYCLOAK MODULE="M-KEYCLOAK" PRIORITY="high">
+      <test-files>
+        <file>tests/IdentityService.KeycloakAdapter.UnitTests/</file>
+      </test-files>
+      <module-checks>
+        <check-1>dotnet test tests/IdentityService.KeycloakAdapter.UnitTests/</check-1>
+        <check-2>Keycloak admin API calls succeed/fail with correct exception types</check-2>
+        <check-3>JWT validation: JWKS cache fetches and updates correctly</check-3>
+      </module-checks>
+      <scenarios>
+        <scenario-1 kind="success">Create user in Keycloak returns userId</scenario-1>
+        <scenario-2 kind="failure">Keycloak down → API timeout exception caught</scenario-2>
+        <scenario-3 kind="success">Token validation via JWKS cache</scenario-3>
+        <scenario-4 kind="success">JWKS cache auto-refresh on TTL expiry</scenario-4>
+      </scenarios>
+      <wave-follow-up>Integration: Keycloak TestContainers or mock server</wave-follow-up>
+      <phase-follow-up>Chaos: kill Keycloak pod during saga → verify DLQ processing</phase-follow-up>
+    </V-M-KEYCLOAK>
+
+    <V-M-CACHE MODULE="M-CACHE" PRIORITY="high">
+      <test-files>
+        <file>tests/IdentityService.CacheLayer.UnitTests/</file>
+      </test-files>
+      <module-checks>
+        <check-1>dotnet test tests/IdentityService.CacheLayer.UnitTests/</check-1>
+        <check-2>MongoDB cache CRUD operations work correctly</check-2>
+        <check-3>TTL indexes enforced, cache entries expire</check-3>
+      </module-checks>
+      <scenarios>
+        <scenario-1 kind="success">Insert and query user cache</scenario-1>
+        <scenario-2 kind="failure">Duplicate userId raises exception</scenario-2>
+        <scenario-3 kind="success">Cache entry expires after TTL</scenario-3>
+      </scenarios>
+      <wave-follow-up>Testcontainers.MongoDB replica-set tests</wave-follow-up>
+      <phase-follow-up>MongoDB failover: verify cache resync</phase-follow-up>
+    </V-M-CACHE>
+  </ModuleVerification>
+
+  <PhaseGates>
+    <Gate-Phase-1 PHASE="Phase-1">
+      <solution>IdentityServices</solution>
+      <goal>Contracts, cache layer, Keycloak adapter unit tests pass</goal>
+      <commands>
+        <command-1>dotnet test tests/IdentityService.Shared.UnitTests/</command-1>
+        <command-2>dotnet test tests/IdentityService.CacheLayer.UnitTests/</command-2>
+        <command-3>dotnet test tests/IdentityService.KeycloakAdapter.UnitTests/</command-3>\n      </commands>\n    </Gate-Phase-1>\n\n    <Gate-Phase-2 PHASE=\"Phase-2\">\n      <solution>IdentityServices</solution>\n      <goal>Reader and Writer working end-to-end to MQ</goal>\n      <commands>\n        <command-1>dotnet test tests/IdentityService.Api.ReaderService.UnitTests/</command-1>\n        <command-2>dotnet test tests/IdentityService.Api.WriterService.UnitTests/</command-2>\n        <command-3>dotnet test tests/IdentityService.IntegrationTests/ --filter \"Category=Wave2\"</command-3>\n      </commands>\n    </Gate-Phase-2>\n\n    <Gate-Phase-3 PHASE=\"Phase-3\">\n      <solution>IdentityServices</solution>\n      <goal>Worker sagas, DLQ failure handling, idempotency pass all tests</goal>\n      <commands>\n        <command-1>dotnet test tests/IdentityService.WorkerService.UnitTests/</command-1>\n        <command-2>dotnet test tests/IdentityService.IntegrationTests/ --filter \"Category=Wave3\"</command-2>\n        <command-3>dotnet test tests/IdentityService.IntegrationTests/ --filter \"Category=DLQ\"</command-3>\n      </commands>\n    </Gate-Phase-3>\n\n    <Gate-Phase-4 PHASE=\"Phase-4\">\n      <solution>IdentityServices</solution>\n      <goal>K8s deployed, 500 op/s write path, cache hit ≥95%, zero loss, DLQ processing</goal>\n      <commands>\n        <command-1>kubectl apply --dry-run=client -f deploy/k8s/</command-1>\n        <command-2>dotnet run --project tests/IdentityService.LoadTests/ -- --rate 500 --duration 300 --validate-cache-hit 0.95 --validate-dlq true</command-2>\n      </commands>\n    </Gate-Phase-4>\n  </PhaseGates>\n</VerificationPlan>\n

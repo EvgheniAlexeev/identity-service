@@ -1,0 +1,79 @@
+---
+stepsCompleted: []
+inputDocuments:
+  - technology.xml
+workflowType: 'requirements'
+---
+
+<RequirementsAnalysis VERSION="0.2.0">
+  <Project>
+    <name>IdentityService</name>
+    <solution-file>IdentityServices.sln</solution-file>
+    <annotation>Identity and user management microservice in MIF wrapping Keycloak. Reader API queries user/role cache; Writer API routes user provisioning and role sync commands to Worker sagas via MQ. MongoDB caches Keycloak state.</annotation>
+    <keywords>mif, identity-management, keycloak, cqrs, dapr, wolverine, mongodb, k8s, user-provisioning, role-management</keywords>
+  </Project>
+
+  <Actors>
+    <actor-Admin>Platform admin managing users, roles, groups via Writer API</actor-Admin>
+    <actor-Application>External service querying user identities and tokens via Reader API</actor-Application>
+    <actor-User>End user performing self-service actions via Reader API</actor-User>
+    <actor-System>Internal: Reader (query-only), Writer (command gateway), Worker (saga processor + Keycloak sync)</actor-System>
+  </Actors>
+
+  <UseCases>
+    <UC-001>
+      <Actor>Admin</Actor>
+      <Action>Creates user via Writer API</Action>
+      <Goal>User provisioned in Keycloak and cached in MongoDB</Goal>
+      <Preconditions>Writer API reachable; Keycloak admin API available</Preconditions>
+      <AcceptanceCriteria>User appears in Keycloak within 2s; cache synchronized; failure triggers compensation</AcceptanceCriteria>
+      <Priority>critical</Priority>
+      <RelatedFlows>DF-USER-PROVISION</RelatedFlows>
+    </UC-001>
+
+    <UC-002>
+      <Actor>Application</Actor>
+      <Action>Queries user/token via Reader API</Action>
+      <Goal>Fast cached response without hitting Keycloak</Goal>
+      <Preconditions>Reader API reachable; cache warm</Preconditions>
+      <AcceptanceCriteria>Response ≤10ms p95 cache hit; ≤200ms p95 cache miss</AcceptanceCriteria>
+      <Priority>high</Priority>
+      <RelatedFlows>DF-QUERY-USER</RelatedFlows>
+    </UC-003>
+
+    <UC-003>
+      <Actor>System</Actor>
+      <Action>Worker saga syncs role changes bidirectionally</Action>
+      <Goal>Keycloak and MongoDB stay in sync with eventual consistency ≤2s</Goal>
+      <Preconditions>Keycloak admin API reachable; MongoDB transactions available</Preconditions>
+      <AcceptanceCriteria>Saga compensates on Keycloak/MongoDB failure; no state divergence</AcceptanceCriteria>
+      <Priority>critical</Priority>
+      <RelatedFlows>DF-SAGA-SYNC</RelatedFlows>
+    </UC-004>
+  </UseCases>
+
+  <NonGoals>
+    <item-1>No custom authentication server — Keycloak is sole IdP</item-1>
+    <item-2>No LDAP/AD integration — federation handled in Keycloak</item-2>
+    <item-3>No web UI admin console — API-only</item-3>
+  </NonGoals>
+
+  <Constraints>
+    <constraint-1>Must sustain 500 identity operations/sec under 3-replica Writer + 3-replica Worker</constraint-1>
+    <constraint-2>Keycloak API calls must be async; Writer returns 202 immediately</constraint-2>
+    <constraint-3>All logs include correlationId; secrets/tokens/email redacted</constraint-3>
+    <constraint-4>Dapr sidecar in every pod</constraint-4>
+    <constraint-5>Read-write eventual consistency window ≤2s</constraint-5>
+  </Constraints>
+
+  <Risks>
+    <risk-1>Keycloak availability: admin API down → Worker sagas fail</risk-1>
+    <risk-2>Cache invalidation: drift between Keycloak and MongoDB on concurrent updates</risk-2>
+    <risk-3>Token introspection at scale: cold cache hammers Keycloak</risk-3>
+  </Risks>
+
+  <OpenQuestions>
+    <question-1>Keycloak version? LTS 26.x assumed.</question-1>
+    <question-2>Cache warming strategy: full export at startup or lazy-load?</question-2>
+  </OpenQuestions>
+</RequirementsAnalysis>

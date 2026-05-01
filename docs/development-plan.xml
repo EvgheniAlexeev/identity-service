@@ -1,0 +1,249 @@
+<DevelopmentPlan VERSION="0.2.0">
+  <ArchitectureNotes>
+    <objective>Identity management microservice in MIF: Reader (query-only user/role cache), Writer (command gateway), Worker (saga processor + Keycloak sync via MQ).</objective>
+    <non-goal>No custom auth server, no LDAP/AD integration, no web UI admin console.</non-goal>
+    <risk-1>Keycloak availability: admin API down triggers Worker saga failure and compensation.</risk-1>
+    <risk-2>Cache invalidation: drift between Keycloak and MongoDB on concurrent updates.</risk-2>
+  </ArchitectureNotes>
+
+  <Modules>
+    <M-SHARED NAME="IdentityService.Shared" TYPE="UTILITY" LAYER="0" ORDER="0" STATUS="planned">
+      <contract>
+        <purpose>User, role, event DTOs shared across Reader, Writer, Worker.</purpose>
+        <inputs></inputs>
+        <outputs>
+          <param name="UserCreatedDto" type="record (command)" />
+          <param name="UserCreated" type="record (event)" />
+          <param name="RoleAssigned" type="record (event)" />
+        </outputs>
+      </contract>
+      <interface>
+        <type-UserCreatedDto PURPOSE="User creation command" />
+        <type-UserCreated PURPOSE="User created event" />
+      </interface>
+      <depends>none</depends>
+      <target>
+        <source>src/IdentityService.Shared/</source>
+        <tests>tests/IdentityService.Shared.UnitTests/</tests>
+      </target>
+      <verification-ref>V-M-SHARED</verification-ref>
+    </M-SHARED>
+
+    <M-READER NAME="IdentityService.Api.ReaderService" TYPE="ENTRY_POINT" LAYER="0" ORDER="1" STATUS="planned">
+      <contract>
+        <purpose>Query-only API: user/role cache from MongoDB, token introspection (no saga involvement).</purpose>
+        <inputs>
+          <param name="userQuery" type="UserQueryDto" />
+          <param name="tokenIntrospectRequest" type="TokenIntrospectDto" />
+        </inputs>
+        <outputs>
+          <param name="userDocument" type="UserDocument (cached)" />
+          <param name="tokenValidationResult" type="TokenValidationResult" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-GetUser PURPOSE="GET /api/users/{userId}" />
+        <export-PostIntrospect PURPOSE="POST /api/introspect - token validation" />
+        <fn-QueryCacheOrKeycloak PURPOSE="Query cache first, fall back to Keycloak on miss" />
+      </interface>
+      <depends>M-SHARED, M-CACHE, M-KEYCLOAK</depends>
+      <target>
+        <source>src/IdentityService.Api.ReaderService/</source>
+        <tests>tests/IdentityService.Api.ReaderService.UnitTests/</tests>
+      </target>
+      <observability>
+        <log-prefix>[IdentityService.Api.ReaderService]</log-prefix>
+        <critical-block>BLOCK_QUERY_CACHE</critical-block>
+        <critical-block>BLOCK_TOKEN_VALIDATE</critical-block>
+      </observability>
+      <verification-ref>V-M-READER</verification-ref>
+    </M-READER>
+
+    <M-WRITER NAME="IdentityService.Api.WriterService" TYPE="ENTRY_POINT" LAYER="0" ORDER="2" STATUS="planned">
+      <contract>
+        <purpose>Command gateway: user provisioning and role sync commands routed to MQ async (202 Accepted).</purpose>
+        <inputs>
+          <param name="userCommand" type="UserCreatedDto" />
+          <param name="roleCommand" type="RoleAssignDto" />
+        </inputs>
+        <outputs>
+          <param name="acceptedResponse" type="AcceptedResult (202 + correlationId)" />
+          <param name="publishedMessage" type="*Saga command (to MQ)" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-PostCreateUser PURPOSE="POST /api/users - create user (async)" />
+        <export-PostAssignRole PURPOSE="POST /api/users/{id}/roles - assign role (async)" />
+      </interface>
+      <depends>M-SHARED</depends>
+      <target>
+        <source>src/IdentityService.Api.WriterService/</source>
+        <tests>tests/IdentityService.Api.WriterService.UnitTests/</tests>
+      </target>
+      <observability>
+        <log-prefix>[IdentityService.Api.WriterService]</log-prefix>
+        <critical-block>BLOCK_PUBLISH_COMMAND</critical-block>
+      </observability>
+      <verification-ref>V-M-WRITER</verification-ref>
+    </M-WRITER>
+
+    <M-WORKER NAME="IdentityService.WorkerService" TYPE="CORE_LOGIC" LAYER="1" ORDER="3" STATUS="planned">
+      <contract>
+        <purpose>Saga processor: ProvisionUserSaga (Keycloak → MongoDB), SyncRoleSaga (bidirectional Keycloak ↔ MongoDB) with compensation.</purpose>
+        <inputs>
+          <param name="provisionUserCommand" type="ProvisionUserSaga (from MQ)" />
+          <param name="syncRoleCommand" type="SyncRoleSaga (from MQ)" />
+        </inputs>
+        <outputs>
+          <param name="userProvisioned" type="UserProvisioned (event)" />
+          <param name="roleSynced" type="RoleSynced (event)" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-ProvisionUserHandler PURPOSE="Wolverine handler: starts ProvisionUserSaga" />
+        <class-ProvisionUserSaga PURPOSE="Keycloak create → MongoDB cache → emit UserProvisioned" />
+        <class-SyncRoleSaga PURPOSE="Keycloak role assign → MongoDB cache invalidate → emit RoleSynced" />
+        <fn-CheckIdempotency PURPOSE="Idempotency ledger check" />
+        <fn-Compensate PURPOSE="Revert Keycloak/MongoDB on failure" />
+      </interface>
+      <depends>M-SHARED, M-KEYCLOAK, M-CACHE</depends>
+      <target>
+        <source>src/IdentityService.WorkerService/</source>
+        <tests>tests/IdentityService.WorkerService.UnitTests/</tests>
+      </target>
+      <observability>
+        <log-prefix>[IdentityService.WorkerService]</log-prefix>
+        <critical-block>BLOCK_SAGA_START</critical-block>
+        <critical-block>BLOCK_KEYCLOAK_CALL</critical-block>
+        <critical-block>BLOCK_CACHE_UPDATE</critical-block>
+        <critical-block>BLOCK_COMPENSATE</critical-block>
+      </observability>
+      <verification-ref>V-M-WORKER</verification-ref>
+    </M-WORKER>
+
+    <M-KEYCLOAK NAME="IdentityService.KeycloakAdapter" TYPE="INTEGRATION" LAYER="0" ORDER="4" STATUS="planned">
+      <contract>
+        <purpose>Keycloak admin API client + JWT validator with JWKS cache.</purpose>
+        <inputs>
+          <param name="userDto" type="UserCreatedDto" />
+          <param name="token" type="string (JWT)" />
+        </inputs>
+        <outputs>
+          <param name="keycloakUserId" type="string" />
+          <param name="validationResult" type="TokenValidationResult" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-IKeycloakAdminClient PURPOSE="Admin operations: user/role management" />
+        <export-ITokenValidator PURPOSE="Token validation: JWKS cache + JWT parsing" />
+      </interface>
+      <depends>none (external: Keycloak)</depends>
+      <target>
+        <source>src/IdentityService.KeycloakAdapter/</source>
+        <tests>tests/IdentityService.KeycloakAdapter.UnitTests/</tests>
+      </target>
+      <observability>
+        <log-prefix>[IdentityService.KeycloakAdapter]</log-prefix>
+        <critical-block>BLOCK_KEYCLOAK_API_CALL</critical-block>
+        <critical-block>BLOCK_TOKEN_VALIDATE</critical-block>
+      </observability>
+      <verification-ref>V-M-KEYCLOAK</verification-ref>
+    </M-KEYCLOAK>
+
+    <M-CACHE NAME="IdentityService.CacheLayer" TYPE="DATA_LAYER" LAYER="0" ORDER="5" STATUS="planned">
+      <contract>
+        <purpose>MongoDB user/role cache: fast queries without Keycloak calls, TTL-based invalidation.</purpose>
+        <inputs>
+          <param name="userDocument" type="UserDocument" />
+          <param name="roleDocument" type="RoleDocument" />
+        </inputs>
+        <outputs>
+          <param name="cachedUser" type="UserDocument" />
+          <param name="cachedRoles" type="List&lt;RoleDocument&gt;" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-IUserCacheRepository PURPOSE="User cache CRUD + TTL invalidation" />
+        <export-IRoleCacheRepository PURPOSE="Role cache CRUD" />
+      </interface>
+      <depends>none</depends>
+      <target>
+        <source>src/IdentityService.CacheLayer/</source>
+        <tests>tests/IdentityService.CacheLayer.UnitTests/</tests>
+      </target>
+      <observability>
+        <log-prefix>[IdentityService.CacheLayer]</log-prefix>
+        <critical-block>BLOCK_CACHE_HIT</critical-block>
+        <critical-block>BLOCK_CACHE_MISS</critical-block>
+        <critical-block>BLOCK_CACHE_INVALIDATE</critical-block>
+      </observability>
+      <verification-ref>V-M-CACHE</verification-ref>
+    </M-CACHE>
+  </Modules>
+
+  <DataFlow>
+    <DF-USER-PROVISION NAME="User Provisioning" TRIGGER="POST /api/users">
+      <step-1>Writer receives UserCreatedDto, validates, publishes to MQ.</step-1>
+      <step-2>Worker ProvisionUserSaga: create in Keycloak, cache in MongoDB, emit UserProvisioned.</step-2>
+      <step-3>On Keycloak failure, compensate: revert MongoDB cache.</step-3>
+    </DF-USER-PROVISION>
+
+    <DF-QUERY-USER NAME="User Query (Cache)" TRIGGER="GET /api/users/{userId}">
+      <step-1>Reader queries MongoDB cache (cache hit: ≤10ms).</step-1>
+      <step-2>Cache miss: validate token against Keycloak JWKS (in-memory cache), update MongoDB cache.</step-2>
+    </DF-QUERY-USER>
+
+    <DF-SAGA-SYNC NAME="Role Sync Saga" TRIGGER="POST /api/users/{id}/roles">
+      <step-1>Writer publishes role assign command to MQ.</step-1>
+      <step-2>Worker SyncRoleSaga: assign in Keycloak, update MongoDB cache, invalidate user cache.</step-2>
+      <step-3>On failure, compensate: revert Keycloak and MongoDB.</step-3>
+    </DF-SAGA-SYNC>
+  </DataFlow>
+
+  <ImplementationOrder>
+    <Phase-1 name="Foundation" status="pending">
+      <goal>Establish solution structure, shared contracts, persistence layer, Keycloak adapter, and unit test harness.</goal>
+      <solution name="IdentityServices">
+        <step-1 module="M-SHARED" status="pending" verification="V-M-SHARED">Create IdentityServices.sln + IdentityService.Shared project with all DTOs/events/commands.</step-1>
+        <step-2 module="M-CACHE" status="pending" verification="V-M-CACHE">Implement IdentityService.CacheLayer: MongoDB user/role cache, TTL indexes, repositories.</step-2>
+        <step-3 module="M-KEYCLOAK" status="pending" verification="V-M-KEYCLOAK">Implement IdentityService.KeycloakAdapter: Keycloak admin API client, JWT parser, JWKS cache (in-memory).</step-3>
+        <step-4 module="M-CACHE" status="pending" verification="V-M-CACHE">Integration tests: Testcontainers.MongoDB, JWKS cache refresh, TTL invalidation.</step-4>
+      </solution>
+    </Phase-1>
+
+    <Phase-2 name="Reader-and-Writer" status="pending">
+      <goal>Query path (Reader + token introspection) and command gateway (Writer) working end-to-end up to MQ publish.</goal>
+      <solution name="IdentityServices">
+        <step-1 module="M-READER" status="pending" verification="V-M-READER">Implement IdentityService.Api.ReaderService: GET /api/users/{id}, POST /api/introspect, cache queries (no Keycloak fallback).</step-1>
+        <step-2 module="M-WRITER" status="pending" verification="V-M-WRITER">Implement IdentityService.Api.WriterService: POST /api/users (create), POST /api/users/{id}/roles (assign), Dapr pub/sub publish with partition key (userId).</step-2>
+        <step-3 module="M-READER" status="pending" verification="V-M-READER">Integration test: Reader queries cache only, token introspection validates JWKS, Writer→MQ publish verified.</step-3>
+      </solution>
+    </Phase-2>
+
+    <Phase-3 name="Worker-Saga" status="pending">
+      <goal>Saga processing: ProvisionUserSaga (Keycloak→MongoDB) and SyncRoleSaga (bidirectional) with DLQ failure handling.</goal>
+      <solution name="IdentityServices">
+        <step-1 module="M-WORKER" status="pending" verification="V-M-WORKER">Implement IdentityService.WorkerService: ProvisionUserSaga (Keycloak create→cache), SyncRoleSaga (bidirectional), idempotency checks.</step-1>
+        <step-2 module="M-WORKER" status="pending" verification="V-M-WORKER">DLQ handler: on saga failure at any step, publish FailedIdentityEvent to DLQ with full context (original input, failed step, error, Keycloak response).</step-2>
+        <step-3 module="M-WORKER" status="pending" verification="V-M-WORKER">Saga integration tests: happy path, DLQ on Keycloak API failure, idempotency replay, concurrent saga per userId isolation.</step-3>
+      </solution>
+    </Phase-3>
+
+    <Phase-4 name="Deployment-and-Scale" status="pending">
+      <goal>K8s manifests, Dapr component configs, GitOps pipeline, and throughput validation under load.</goal>
+      <solution name="IdentityServices">
+        <step-1 module="M-DEPLOY" status="pending" verification="V-M-DEPLOY">K8s manifests: Reader/Writer/Worker Deployments, Dapr pub/sub Component, MongoDB StatefulSet, DLQ topic, Keycloak sidecar config.</step-1>
+        <step-2 module="M-DEPLOY" status="pending" verification="V-M-DEPLOY">GitOps pipeline: centralized repo integration, automated deploy on merge to main.</step-2>
+        <step-3 module="M-DEPLOY" status="pending" verification="V-M-DEPLOY">Load test: 500 op/s sustained on write path, cache hit rate ≥95%, verify partition distribution by userId, measure p99 latency, validate DLQ processing under Keycloak degradation.</step-3>
+      </solution>
+    </Phase-4>
+  </ImplementationOrder>
+
+  <ExecutionPolicy>
+    <default-profile>balanced</default-profile>
+    <controller-owns>docs/development-plan.xml, docs/knowledge-graph.xml, docs/verification-plan.xml</controller-owns>
+    <worker-owns>Only module source and tests in approved write scope</worker-owns>
+    <max-fix-attempts-per-step>2</max-fix-attempts-per-step>
+    <replan-trigger>Missing dependency, contradictory contract, unclear Keycloak API version</replan-trigger>
+  </ExecutionPolicy>
+</DevelopmentPlan>
