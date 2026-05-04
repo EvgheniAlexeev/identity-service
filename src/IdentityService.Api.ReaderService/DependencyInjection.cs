@@ -1,3 +1,4 @@
+using IdentityService.Api.ReaderService.Features;
 using IdentityService.Api.ReaderService.Handlers;
 using IdentityService.Api.ReaderService.Validators;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,12 +15,15 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddReaderApi(this IServiceCollection services)
     {
-        // Handlers
+        // Legacy handlers (backward compat)
         services.AddScoped<IGetUserHandler, GetUserHandler>();
         services.AddScoped<IGetRoleHandler, GetRoleHandler>();
 
-        // Validators
+        // Legacy validators
         services.AddScoped<GetUserRequestValidator>();
+
+        // VSA feature registration
+        services.AddReaderServiceFeatures();
 
         // Controllers are auto-registered by AddControllers()
         return services;

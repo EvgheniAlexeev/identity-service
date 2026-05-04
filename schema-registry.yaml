@@ -1,0 +1,179 @@
+registry:
+  version: "1.0.0"
+  lastUpdated: "2026-05-04"
+  service: "IdentityService"
+  
+services:
+  IdentityService:
+    version: "1.0.0"
+    description: "User identity and provisioning microservice"
+    repository: "github.com/EvgheniAlexeev/identity-service"
+    image: "ghcr.io/EvgheniAlexeev/identity-service"
+    
+    projects:
+      ReaderService:
+        name: "IdentityService.Api.ReaderService"
+        type: "Query/Read"
+        port: 8082
+      WriterService:
+        name: "IdentityService.Api.WriterService"
+        type: "Command/Write"
+        port: 8082
+      WorkerService:
+        name: "IdentityService.WorkerService"
+        type: "Saga/Worker"
+        port: 9999
+    
+    features:
+      # Reader Features
+      identity.get_user:
+        name: "GetUser"
+        category: "Reader"
+        project: "ReaderService"
+        path: "Features/GetUser"
+        endpoint:
+          method: "GET"
+          path: "/api/users/{id}"
+          request: "GetUserRequest"
+          response: "GetUserResponse"
+          status: 200
+        handler: "GetUserHandler"
+        cache: "MongoDB TTL (5 min)"
+        tests: 10+
+        semantic_blocks:
+          - QUERY_VALIDATION
+          - CACHE_LOOKUP
+          - RESPONSE_MAPPING
+        verification:
+          - name: "test_get_user_cache_hit"
+            description: "User in cache returns cached data"
+          - name: "test_get_user_cache_miss"
+            description: "User not in cache returns 404 (cache-only)"
+      
+      identity.query_users:
+        name: "QueryUsers"
+        category: "Reader"
+        project: "ReaderService"
+        path: "Features/QueryUsers"
+        endpoint:
+          method: "POST"
+          path: "/api/users/query"
+          request: "QueryUsersRequest"
+          response: "QueryUsersResponse"
+          status: 200
+        handler: "QueryUsersHandler"
+        tests: 10+
+        semantic_blocks:
+          - REQUEST_VALIDATION
+          - FILTER_BUILD
+          - CACHE_QUERY
+          - PAGINATION
+          - RESPONSE_MAPPING
+        verification:
+          - name: "test_query_users_with_filters"
+            description: "Filters applied correctly"
+          - name: "test_query_users_pagination"
+            description: "Pagination working"
+      
+      # Writer Features (Week 3-4)
+      identity.provision_user:
+        name: "ProvisionUser"
+        category: "Writer"
+        project: "WriterService"
+        path: "Features/ProvisionUser"
+        planned_for: "Week 3-4"
+        endpoint:
+          method: "POST"
+          path: "/api/users"
+          request: "ProvisionUserRequest"
+          response: "ProvisionUserResponse"
+          status: 202
+        saga: "ProvisionUserSaga"
+        saga_steps:
+          - name: "CreateInKeycloak"
+            timeout: "1m"
+            retry: "Polly (3x, exponential backoff 100ms-2s)"
+          - name: "UpdateCache"
+            timeout: "1m"
+          - name: "Notify"
+            timeout: "1m"
+        saga_timeout: "5m"
+        dlq: "UserFailedQueue"
+        tests: 40+
+      
+      # Worker Features (Week 3-4)
+      identity.saga.create_keycloak:
+        name: "CreateInKeycloak"
+        category: "Worker"
+        project: "WorkerService"
+        planned_for: "Week 3-4"
+        handler: "CreateInKeycloakHandler"
+        event_trigger: "CreateInKeycloakCommand"
+        events_produced:
+          - "UserCreatedInKeycloak"
+          - "UserFailed"
+        retry_policy: "Polly (3x, exponential backoff)"
+      
+      identity.saga.update_cache:
+        name: "UpdateCache"
+        category: "Worker"
+        project: "WorkerService"
+        planned_for: "Week 3-4"
+        handler: "UpdateCacheHandler"
+        event_trigger: "UpdateCacheCommand"
+        events_produced:
+          - "CacheUpdated"
+          - "UserFailed"
+      
+      identity.saga.notify:
+        name: "Notify"
+        category: "Worker"
+        project: "WorkerService"
+        planned_for: "Week 3-4"
+        handler: "NotifyHandler"
+        event_trigger: "NotifyCommand"
+        events_produced:
+          - "UserProvisioned"
+          - "UserFailed"
+    
+    contracts:
+      identity.provision_user:
+        name: "User Provisioning Contract"
+        version: "1.0"
+        input:
+          type: "ProvisionUserRequest"
+          required_fields:
+            - email (valid format)
+            - firstName (non-empty)
+            - lastName (non-empty)
+            - requestId (UUID)
+        saga_flow:
+          - step: "CreateInKeycloak"
+            input: "ProvisionUserRequest"
+            output: "UserCreatedInKeycloak or UserFailed"
+            retry: "Polly (3x)"
+          - step: "UpdateCache"
+            input: "UserCreatedInKeycloak"
+            output: "CacheUpdated or UserFailed"
+          - step: "Notify"
+            input: "CacheUpdated"
+            output: "UserProvisioned or UserFailed"
+        output:
+          on_success:
+            type: "UserProvisioned"
+            contains:
+              - userId
+              - email
+              - status: "provisioned"
+              - cache_updated: true
+          on_failure:
+            type: "UserFailed"
+            dlq: true
+            preserves:
+              - originalRequest
+              - error context
+              - step where failed
+        sla:
+          completion_time: "< 5 minutes"
+          idempotency: "RequestId (safe to retry)"
+          keycloak_retry: "3 attempts, exponential backoff 100ms-2s"
