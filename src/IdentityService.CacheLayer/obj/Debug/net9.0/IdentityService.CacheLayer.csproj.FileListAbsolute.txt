@@ -1,0 +1,17 @@
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/bin/Debug/net9.0/IdentityService.CacheLayer.deps.json
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/bin/Debug/net9.0/IdentityService.CacheLayer.dll
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/bin/Debug/net9.0/IdentityService.CacheLayer.pdb
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/bin/Debug/net9.0/IdentityService.Shared.dll
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/bin/Debug/net9.0/IdentityService.Shared.pdb
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/bin/Debug/net9.0/IdentityService.Shared.xml
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.csproj.AssemblyReference.cache
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.GeneratedMSBuildEditorConfig.editorconfig
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.AssemblyInfoInputs.cache
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.AssemblyInfo.cs
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.csproj.CoreCompileInputs.cache
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.sourcelink.json
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/Identity.E604D859.Up2Date
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.dll
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/refint/IdentityService.CacheLayer.dll
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/IdentityService.CacheLayer.pdb
+/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/Debug/net9.0/ref/IdentityService.CacheLayer.dll
