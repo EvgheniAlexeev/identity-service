@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: mif_identity_cache
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1
+    ports:
+      - "8080:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    command: start-dev --http-port=8080 --http-relative-path=/auth
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  identity-worker:
+    build:
+      context: ../../src/IdentityService.WorkerService
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+      - "9090:9090"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Keycloak__Url=http://keycloak:8080/auth
+      - Keycloak__Realm=mif
+      - Keycloak__ClientId=identity-service
+      - Keycloak__ClientSecret=test-secret
+      - MongoDB__ConnectionString=mongodb://mongodb:27017
+      - Prometheus__Port=9090
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy

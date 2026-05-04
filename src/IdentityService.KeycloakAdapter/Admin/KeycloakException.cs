@@ -19,4 +19,10 @@ public class KeycloakException : Exception
     {
         StatusCode = statusCode;
     }
+
+    /// <summary>
+    /// Returns true if the Keycloak API returned a 404 (user not found).
+    /// Used by saga failure handler to classify UserAlreadyExists vs retryable errors.
+    /// </summary>
+    public bool IsNotFound() => StatusCode == 404;
 }
