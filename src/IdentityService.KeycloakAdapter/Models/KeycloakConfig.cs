@@ -1,6 +1,6 @@
 // FILE: KeycloakConfig.cs
 // VERSION: 2.0.0
-// MODULE: M-IDENTITY-KEYCLOAK
+// MODULE: M-KEYCLOAK
 // PURPOSE: Keycloak integration (M-IDENTITY-KEYCLOAK)
 // SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
 // START_MODULE M_IDENTITY_KEYCLOAK
@@ -13,9 +13,6 @@ namespace IdentityService.KeycloakAdapter.Models;
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
 /// <para><strong>@purpose:</strong> Configuration record for Keycloak connection with derived URLs</para>
-/// <para><strong>@module-type:</strong> INTEGRATION</para>
-/// <para><strong>@domain-concept:</strong> KeycloakConfig (value object)</para>
-/// <para><strong>@stability:</strong> STABLE</para>
 /// </remarks>
 public record KeycloakConfig
 {

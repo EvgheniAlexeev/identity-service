@@ -16,10 +16,8 @@ namespace IdentityService.CacheLayer.MongoDB;
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-CACHE</para>
 /// <para><strong>@purpose:</strong> Configures MongoDB indexes for user and role cache with TTL-based auto-expiration</para>
-/// <para><strong>@module-type:</strong> DATA_LAYER</para>
 /// <para><strong>@invariant:</strong> Creates TTL index on ExpiresAt (auto-cleanup)</para>
 /// <para><strong>@invariant:</strong> Creates unique index on UserId and RoleId</para>
-/// <para><strong>@stability:</strong> STABLE</para>
 /// <para><strong>@verification-ref:</strong> V-M-CACHE-ID</para>
 /// </remarks>
 public static class CacheIndexConfiguration
