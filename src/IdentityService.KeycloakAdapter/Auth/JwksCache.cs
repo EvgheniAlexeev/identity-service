@@ -8,6 +8,14 @@ namespace IdentityService.KeycloakAdapter.Auth;
 /// BLOCK_JWKS_CACHE In-memory JWKS (JSON Web Key Set) cache.
 /// Caches Keycloak's public keys for 1 hour by default.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@purpose:</strong> In-memory JWKS cache with TTL and stampede prevention for JWT validation</para>
+/// <para><strong>@module-type:</strong> INTEGRATION</para>
+/// <para><strong>@invariant:</strong> Cache TTL: 1 hour (configurable)</para>
+/// <para><strong>@invariant:</strong> Stampede prevention: single concurrent refresh via SemaphoreSlim</para>
+/// <para><strong>@stability:</strong> STABLE</para>
+/// </remarks>
 public class JwksCache
 {
     private JsonWebKeySet? _jwks;
@@ -26,6 +34,22 @@ public class JwksCache
     /// BLOCK_JWKS_CACHE_CHECK Returns cached JWKS if still valid.
     /// BLOCK_JWKS_CACHE_REFRESH Fetches from Keycloak if expired.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> GetJwksAsync</para>
+    /// <para><strong>@param httpClient:</strong> HttpClient for JWKS fetch</para>
+    /// <para><strong>@param jwksUrl:</strong> Keycloak JWKS endpoint URL</para>
+    /// <para><strong>@return:</strong> JsonWebKeySet from cache or refreshed from Keycloak</para>
+    /// <para><strong>@log-event:</strong> keycloak.cache.get-jwks-cache-hit</para>
+    /// <para><strong>@log-event:</strong> keycloak.cache.get-jwks-cache-hit-after-lock</para>
+    /// <para><strong>@log-event:</strong> keycloak.cache.get-jwks-refresh-start {jwksUrl}</para>
+    /// <para><strong>@log-event:</strong> keycloak.cache.get-jwks-refresh-complete {keyCount} {expiresAt}</para>
+    /// <para><strong>@trace-span:</strong> keycloak.cache.get-jwks</para>
+    /// <para><strong>@pre-condition:</strong> jwksUrl != null && httpClient != null</para>
+    /// <para><strong>@post-condition:</strong> result != null && result.Keys.Count > 0</para>
+    /// <para><strong>@complexity:</strong> O(1) (cache) or O(network) on expiry</para>
+    /// <para><strong>@idempotent:</strong> YES</para>
+    /// <para><strong>@pure:</strong> NO (I/O: HTTP + cache mutation)</para>
+    /// </remarks>
     public async Task<JsonWebKeySet> GetJwksAsync(
         HttpClient httpClient,
         string jwksUrl,
@@ -77,6 +101,12 @@ public class JwksCache
     /// <summary>
     /// Force invalidation of the cache. Useful after key rotation.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> Invalidate</para>
+    /// <para><strong>@log-event:</strong> keycloak.cache.jwks-invalidate</para>
+    /// <para><strong>@trace-span:</strong> keycloak.cache.invalidate</para>
+    /// <para><strong>@idempotent:</strong> YES</para>
+    /// </remarks>
     public void Invalidate()
     {
         _logger.LogInformation(

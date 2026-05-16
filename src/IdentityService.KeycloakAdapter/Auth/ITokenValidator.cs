@@ -3,10 +3,38 @@ namespace IdentityService.KeycloakAdapter.Auth;
 /// <summary>
 /// BLOCK_TOKEN_VALIDATE token validation interface.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@purpose:</strong> JWT token validation with cached JWKS (JSON Web Key Set)</para>
+/// <para><strong>@module-type:</strong> INTEGRATION</para>
+/// <para><strong>@depends:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@domain-concept:</strong> ITokenValidator</para>
+/// <para><strong>@invariant:</strong> JWKS cache TTL: 1 hour, stampede prevention enabled</para>
+/// <para><strong>@invariant:</strong> Validates JWT issuer matches configured Keycloak instance</para>
+/// <para><strong>@stability:</strong> STABLE</para>
+/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK-ID</para>
+/// </remarks>
 public interface ITokenValidator
 {
     /// <summary>
     /// Validate a JWT token and return claims.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> ValidateAsync</para>
+    /// <para><strong>@param token:</strong> JWT access token to validate</para>
+    /// <para><strong>@return:</strong> TokenValidationResult with claims if valid</para>
+    /// <para><strong>@throws:</strong> TokenExpiredException — token has expired; InvalidSignatureException — JWT signature invalid</para>
+    /// <para><strong>@log-event:</strong> keycloak.validator.validate-token-start</para>
+    /// <para><strong>@log-event:</strong> keycloak.validator.validate-token-success</para>
+    /// <para><strong>@log-event:</strong> keycloak.validator.validate-token-error {error}</para>
+    /// <para><strong>@log-event:</strong> keycloak.validator.validate-token-jwks-cache-hit</para>
+    /// <para><strong>@log-event:</strong> keycloak.validator.validate-token-jwks-cache-miss</para>
+    /// <para><strong>@trace-span:</strong> keycloak.validator.validate-token</para>
+    /// <para><strong>@pre-condition:</strong> token != null && token.Length > 0</para>
+    /// <para><strong>@post-condition:</strong> result != null</para>
+    /// <para><strong>@complexity:</strong> O(1) (cache-backed)</para>
+    /// <para><strong>@idempotent:</strong> YES</para>
+    /// <para><strong>@pure:</strong> NO (I/O: JWKS cache)</para>
+    /// </remarks>
     Task<TokenValidationResult> ValidateAsync(string token, CancellationToken ct = default);
 }
