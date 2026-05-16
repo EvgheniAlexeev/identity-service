@@ -78,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -155,7 +155,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -244,7 +244,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
@@ -313,7 +313,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
