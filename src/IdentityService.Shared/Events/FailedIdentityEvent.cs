@@ -6,6 +6,16 @@ namespace IdentityService.Shared.Events;
 /// BLOCK_FAILED_IDENTITY event — emitted when an identity operation fails.
 /// Routed to DLQ for retry/disposition. Preserves full original request.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@purpose:</strong> DLQ pattern event preserving original request for manual intervention and replay</para>
+/// <para><strong>@module-type:</strong> UTILITY</para>
+/// <para><strong>@domain-concept:</strong> FailedIdentityEvent (event value object)</para>
+/// <para><strong>@invariant:</strong> OriginalRequest must be non-null for replay capability</para>
+/// <para><strong>@invariant:</strong> ErrorReason must be descriptive</para>
+/// <para><strong>@stability:</strong> STABLE</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED-ID</para>
+/// </remarks>
 public record FailedIdentityEvent : IEvent
 {
     /// <summary>Correlation ID of the failed operation.</summary>

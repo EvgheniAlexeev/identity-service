@@ -8,6 +8,17 @@ namespace IdentityService.Shared.Validators;
 /// BLOCK_VALIDATE UserCreatedDto validation rules.
 /// Enforces: non-empty UserId, valid email format, name length limits.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@purpose:</strong> FluentValidation validator for UserCreatedDto with semantic logging</para>
+/// <para><strong>@module-type:</strong> UTILITY</para>
+/// <para><strong>@domain-concept:</strong> UserCreatedValidator</para>
+/// <para><strong>@invariant:</strong> Email format valid (RFC 5322)</para>
+/// <para><strong>@invariant:</strong> Names non-empty, max 100 chars</para>
+/// <para><strong>@invariant:</strong> UserId max 100 chars</para>
+/// <para><strong>@stability:</strong> STABLE</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED-ID</para>
+/// </remarks>
 public class UserCreatedValidator : AbstractValidator<UserCreatedDto>
 {
     private readonly ILogger<UserCreatedValidator> _logger;
@@ -42,6 +53,18 @@ public class UserCreatedValidator : AbstractValidator<UserCreatedDto>
     /// <summary>
     /// Validate with semantic log markers.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> ValidateAsync</para>
+    /// <para><strong>@param instance:</strong> UserCreatedDto to validate</para>
+    /// <para><strong>@return:</strong> ValidationResult with errors if any</para>
+    /// <para><strong>@log-event:</strong> shared.validator.user-validate-start {userId}</para>
+    /// <para><strong>@log-event:</strong> shared.validator.user-validate-success {userId}</para>
+    /// <para><strong>@log-event:</strong> shared.validator.user-validate-failed {userId} {errors}</para>
+    /// <para><strong>@trace-span:</strong> shared.validate-user</para>
+    /// <para><strong>@complexity:</strong> O(1) (field validation)</para>
+    /// <para><strong>@idempotent:</strong> YES</para>
+    /// <para><strong>@pure:</strong> YES</para>
+    /// </remarks>
     public new async Task<FluentValidation.Results.ValidationResult> ValidateAsync(
         UserCreatedDto instance, CancellationToken ct = default)
     {
