@@ -13,7 +13,7 @@ namespace IdentityService.Shared.Commands;
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
 /// <para><strong>@purpose:</strong> Wolverine command to provision a user in Keycloak and populate cache</para>
 /// <para><strong>@invariant:</strong> IdempotencyKey must be non-empty</para>
-/// <para><strong>@verification-ref:</strong> V-M-IDENTITY-SHARED</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
 /// </summary>
 // START_BLOCK_PROVISION_USER
 public record ProvisionUserCommand : ICommand

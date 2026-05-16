@@ -18,13 +18,9 @@ namespace IdentityService.Api.WriterService.Controllers;
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-WRITER</para>
 /// <para><strong>@purpose:</strong> Accept and queue async user provisioning commands</para>
-/// <para><strong>@module-type:</strong> ENTRY_POINT</para>
-/// <para><strong>@depends:</strong> M-IDENTITY-KEYCLOAK, M-IDENTITY-SHARED</para>
-/// <para><strong>@domain-concept:</strong> UserCommandController</para>
 /// <para><strong>@invariant:</strong> All commands return 202 Accepted (async)</para>
 /// <para><strong>@invariant:</strong> Idempotency via correlationId</para>
-/// <para><strong>@stability:</strong> STABLE</para>
-/// <para><strong>@verification-ref:</strong> V-M-WRITER-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-WRITER</para>
 /// </remarks>
 [ApiController]
 [Route("api/users")]

@@ -13,7 +13,7 @@ namespace IdentityService.Shared.Events;
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
 /// <para><strong>@purpose:</strong> Event emitted when a user is successfully provisioned in Keycloak and cache</para>
 /// <para><strong>@invariant:</strong> CorrelationId must be non-empty</para>
-/// <para><strong>@verification-ref:</strong> V-M-IDENTITY-SHARED</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
 /// </summary>
 // START_BLOCK_USER_PROVISIONED
 public record UserProvisioned : IEvent

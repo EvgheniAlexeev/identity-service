@@ -18,13 +18,10 @@ namespace IdentityService.Shared.Validators;
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
 /// <para><strong>@purpose:</strong> FluentValidation validator for UserCreatedDto with semantic logging</para>
-/// <para><strong>@module-type:</strong> UTILITY</para>
-/// <para><strong>@domain-concept:</strong> UserCreatedValidator</para>
 /// <para><strong>@invariant:</strong> Email format valid (RFC 5322)</para>
 /// <para><strong>@invariant:</strong> Names non-empty, max 100 chars</para>
 /// <para><strong>@invariant:</strong> UserId max 100 chars</para>
-/// <para><strong>@stability:</strong> STABLE</para>
-/// <para><strong>@verification-ref:</strong> V-M-SHARED-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
 /// </remarks>
 public class UserCreatedValidator : AbstractValidator<UserCreatedDto>
 {

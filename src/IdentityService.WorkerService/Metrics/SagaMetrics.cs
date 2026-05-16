@@ -10,9 +10,15 @@ using Prometheus;
 namespace IdentityService.WorkerService.Metrics;
 
 /// <summary>
-/// BLOCK_PROMETHEUS_METRICS Prometheus metrics for saga orchestration observability.
-/// Tracks: saga starts, completions, failures, DLQ publications, retry attempts, step durations.
+/// Saga orchestrator for distributed transaction processing in the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (saga orchestrator, manages distributed transaction lifecycle)</para>
+/// <para><strong>@purpose:</strong> Saga orchestrator for distributed transaction processing in the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> Saga state transitions are deterministic; idempotency ensures exactly-once processing</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public sealed class SagaMetrics
 {
     private readonly Counter _sagaStarted;

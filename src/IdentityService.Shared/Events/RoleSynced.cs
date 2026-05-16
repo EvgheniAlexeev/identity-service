@@ -11,7 +11,7 @@ namespace IdentityService.Shared.Events;
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
 /// <para><strong>@purpose:</strong> Event emitted when a role is synced to the cache</para>
 /// <para><strong>@invariant:</strong> CorrelationId must be non-empty</para>
-/// <para><strong>@verification-ref:</strong> V-M-IDENTITY-SHARED</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
 /// </summary>
 // START_BLOCK_ROLE_SYNCED
 public record RoleSynced : IEvent

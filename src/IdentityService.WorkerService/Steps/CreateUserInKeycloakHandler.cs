@@ -13,10 +13,15 @@ using Microsoft.Extensions.Logging;
 namespace IdentityService.WorkerService.Steps;
 
 /// <summary>
-/// BLOCK_CREATE_IN_KEYCLOAK Step handler for creating a user in Keycloak.
-/// Uses Polly retry policy (3x, exponential backoff 100ms-2s).
-/// Emits UserCreatedInKeycloak or FailedIdentityEvent on failure.
+/// Step handler processing Wolverine commands for the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (step handler, processes Wolverine commands)</para>
+/// <para><strong>@purpose:</strong> Step handler processing Wolverine commands for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> All operations logged with [BLOCK_*] markers for end-to-end traceability</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class CreateUserInKeycloakHandler
 {
     private readonly IKeycloakAdminClient _keycloakClient;

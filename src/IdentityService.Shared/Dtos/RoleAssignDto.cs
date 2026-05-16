@@ -13,11 +13,8 @@ namespace IdentityService.Shared.Dtos;
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
 /// <para><strong>@purpose:</strong> DTO carrying role assignment request</para>
-/// <para><strong>@module-type:</strong> UTILITY</para>
-/// <para><strong>@domain-concept:</strong> RoleAssignDto (value object)</para>
 /// <para><strong>@invariant:</strong> RoleName valid for organization</para>
-/// <para><strong>@stability:</strong> STABLE</para>
-/// <para><strong>@verification-ref:</strong> V-M-SHARED-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
 /// </remarks>
 public record RoleAssignDto
 {

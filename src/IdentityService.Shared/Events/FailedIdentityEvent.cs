@@ -14,7 +14,7 @@ namespace IdentityService.Shared.Events;
 /// <para><strong>@purpose:</strong> DLQ pattern event preserving original request for manual intervention and replay</para>
 /// <para><strong>@invariant:</strong> OriginalRequest must be non-null for replay capability</para>
 /// <para><strong>@invariant:</strong> ErrorReason must be descriptive</para>
-/// <para><strong>@verification-ref:</strong> V-M-IDENTITY-SHARED</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
 /// </summary>
 // START_BLOCK_FAILED_IDENTITY
 public record FailedIdentityEvent : IEvent

@@ -14,9 +14,15 @@ using Microsoft.Extensions.Logging;
 namespace IdentityService.WorkerService.Steps;
 
 /// <summary>
-/// BLOCK_UPDATE_CACHE Step handler for updating the MongoDB user cache.
-/// Populates the cache layer with provisioned user data, TTL-based auto-expiry.
+/// Step handler processing Wolverine commands for the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (step handler, processes Wolverine commands)</para>
+/// <para><strong>@purpose:</strong> Step handler processing Wolverine commands for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> All operations logged with [BLOCK_*] markers for end-to-end traceability</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class UpdateUserCacheHandler
 {
     private readonly IUserCacheRepository _cacheRepository;

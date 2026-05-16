@@ -8,8 +8,15 @@
 namespace IdentityService.WorkerService.Configuration;
 
 /// <summary>
-/// Saga timeout configuration per environment.
+/// Saga orchestrator for distributed transaction processing in the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (saga orchestrator, manages distributed transaction lifecycle)</para>
+/// <para><strong>@purpose:</strong> Saga orchestrator for distributed transaction processing in the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> Saga state transitions are deterministic; idempotency ensures exactly-once processing</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class SagaTimeoutConfiguration
 {
     /// <summary>Development timeout (default: 5 minutes).</summary>

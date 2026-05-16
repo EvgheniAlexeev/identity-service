@@ -8,8 +8,15 @@
 namespace IdentityService.WorkerService.Configuration;
 
 /// <summary>
-/// Keycloak retry policy configuration for Polly HTTP resilience.
+/// Configuration model for the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (configuration model)</para>
+/// <para><strong>@purpose:</strong> Configuration model for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> Configuration values have sensible defaults; validated at startup</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class KeycloakRetryConfiguration
 {
     /// <summary>Maximum number of retry attempts (default: 3).</summary>

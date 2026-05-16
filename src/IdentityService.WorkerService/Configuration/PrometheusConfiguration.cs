@@ -8,8 +8,15 @@
 namespace IdentityService.WorkerService.Configuration;
 
 /// <summary>
-/// Prometheus metrics endpoint configuration.
+/// Configuration model for the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (configuration model)</para>
+/// <para><strong>@purpose:</strong> Configuration model for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> Configuration values have sensible defaults; validated at startup</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class PrometheusConfiguration
 {
     /// <summary>Whether the Prometheus metrics endpoint is enabled.</summary>

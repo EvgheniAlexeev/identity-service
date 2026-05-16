@@ -16,11 +16,15 @@ using Polly.Extensions.Http;
 namespace IdentityService.WorkerService.Policies;
 
 /// <summary>
-/// BLOCK_RETRY_POLICY Polly retry policy configuration for Keycloak HTTP calls.
-/// Strategy: Exponential backoff with jitter (100ms-2s, 3 retries).
-/// Applied to ALL HTTP calls (CreateUser, GetUser, DeleteUser, AssignRole).
+/// Retry/resilience policy for the M-WORKER module
 /// </summary>
-public static class KeycloakRetryPolicy
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (resilience policy)</para>
+/// <para><strong>@purpose:</strong> Retry/resilience policy for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> Retry policies respect exponential backoff with jitter</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+class KeycloakRetryPolicy
 {
     /// <summary>
     /// Configures Polly retry policies on Keycloak HttpClients.
