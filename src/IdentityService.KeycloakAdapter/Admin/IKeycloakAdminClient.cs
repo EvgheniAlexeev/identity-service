@@ -15,6 +15,8 @@ namespace IdentityService.KeycloakAdapter.Admin;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-KEYCLOAK</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Adapter interface for Keycloak admin API operations (CreateUser, AssignRole, GetUser, DeleteUser)</para>
 /// <para><strong>@invariant:</strong> Admin operations use authenticated Keycloak client</para>
 /// <para><strong>@invariant:</strong> All operations throw HttpException on API failure</para>

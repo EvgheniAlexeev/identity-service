@@ -14,6 +14,8 @@ namespace IdentityService.CacheLayer.Repositories;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-CACHE</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Provides MongoDB cache repository interface for user identity data with TTL-based expiration</para>
 /// <para><strong>@invariant:</strong> Cache populated by ProvisionUserSaga on completion</para>
 /// <para><strong>@invariant:</strong> TTL range: 60-300 seconds from saga completion</para>

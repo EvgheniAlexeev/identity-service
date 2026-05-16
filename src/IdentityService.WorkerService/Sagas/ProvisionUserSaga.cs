@@ -23,6 +23,8 @@ namespace IdentityService.WorkerService.Sagas;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-WORKER</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Saga orchestrator for user provisioning with Wolverine: Create → Cache → Notify</para>
 /// <para><strong>@invariant:</strong> State: Pending → CreatingInKeycloak → PopulatingCache → Completed/Failed</para>
 /// <para><strong>@invariant:</strong> Cache populated with TTL on saga completion</para>

@@ -12,6 +12,8 @@ namespace IdentityService.Shared.Dtos;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> DTO carrying role assignment request</para>
 /// <para><strong>@invariant:</strong> RoleName valid for organization</para>
 /// <para><strong>@verification-ref:</strong> V-M-SHARED</para>

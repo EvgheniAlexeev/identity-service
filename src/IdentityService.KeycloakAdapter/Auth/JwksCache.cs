@@ -17,6 +17,8 @@ namespace IdentityService.KeycloakAdapter.Auth;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> In-memory JWKS cache with TTL and stampede prevention for JWT validation</para>
 /// <para><strong>@invariant:</strong> Cache TTL: 1 hour (configurable)</para>
 /// <para><strong>@invariant:</strong> Stampede prevention: single concurrent refresh via SemaphoreSlim</para>

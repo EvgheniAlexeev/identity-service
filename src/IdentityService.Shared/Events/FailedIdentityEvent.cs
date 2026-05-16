@@ -11,6 +11,8 @@ namespace IdentityService.Shared.Events;
 
 /// <summary>
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> DLQ pattern event preserving original request for manual intervention and replay</para>
 /// <para><strong>@invariant:</strong> OriginalRequest must be non-null for replay capability</para>
 /// <para><strong>@invariant:</strong> ErrorReason must be descriptive</para>

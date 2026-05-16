@@ -17,6 +17,8 @@ namespace IdentityService.Api.WriterService.Controllers;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-WRITER</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Accept and queue async user provisioning commands</para>
 /// <para><strong>@invariant:</strong> All commands return 202 Accepted (async)</para>
 /// <para><strong>@invariant:</strong> Idempotency via correlationId</para>

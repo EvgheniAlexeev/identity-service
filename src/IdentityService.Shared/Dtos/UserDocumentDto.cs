@@ -13,6 +13,8 @@ namespace IdentityService.Shared.Dtos;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-SHARED</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Data transfer object carrying user information with PII redaction requirements</para>
 /// <para><strong>@invariant:</strong> UserId and Email must be non-empty</para>
 /// <para><strong>@invariant:</strong> Email and PII fields must be redacted in logs</para>

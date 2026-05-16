@@ -12,6 +12,8 @@ namespace IdentityService.KeycloakAdapter.Auth;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-KEYCLOAK</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> JWT token validation with cached JWKS (JSON Web Key Set)</para>
 /// <para><strong>@invariant:</strong> JWKS cache TTL: 1 hour, stampede prevention enabled</para>
 /// <para><strong>@invariant:</strong> Validates JWT issuer matches configured Keycloak instance</para>

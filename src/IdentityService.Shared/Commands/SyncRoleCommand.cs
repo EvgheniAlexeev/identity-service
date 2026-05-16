@@ -11,6 +11,8 @@ namespace IdentityService.Shared.Commands;
 
 /// <summary>
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Wolverine command to sync a role from Keycloak into cache</para>
 /// <para><strong>@invariant:</strong> IdempotencyKey must be non-empty</para>
 /// <para><strong>@verification-ref:</strong> V-M-SHARED</para>

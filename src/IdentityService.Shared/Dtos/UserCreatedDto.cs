@@ -13,6 +13,8 @@ namespace IdentityService.Shared.Dtos;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> DTO carrying user creation request with PII redaction requirements</para>
 /// <para><strong>@invariant:</strong> Email is valid RFC 5322 format</para>
 /// <para><strong>@invariant:</strong> FirstName and LastName non-empty</para>

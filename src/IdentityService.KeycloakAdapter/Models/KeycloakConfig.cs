@@ -12,6 +12,8 @@ namespace IdentityService.KeycloakAdapter.Models;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Configuration record for Keycloak connection with derived URLs</para>
 /// </remarks>
 public record KeycloakConfig
