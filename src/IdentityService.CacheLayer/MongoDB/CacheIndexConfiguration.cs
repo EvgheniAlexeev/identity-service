@@ -6,12 +6,34 @@ namespace IdentityService.CacheLayer.MongoDB;
 /// BLOCK_CACHE_INDEX configuration for cache collections.
 /// Creates TTL indexes for auto-expiry and query indexes for lookups.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-CACHE</para>
+/// <para><strong>@purpose:</strong> Configures MongoDB indexes for user and role cache with TTL-based auto-expiration</para>
+/// <para><strong>@module-type:</strong> DATA_LAYER</para>
+/// <para><strong>@invariant:</strong> Creates TTL index on ExpiresAt (auto-cleanup)</para>
+/// <para><strong>@invariant:</strong> Creates unique index on UserId and RoleId</para>
+/// <para><strong>@stability:</strong> STABLE</para>
+/// <para><strong>@verification-ref:</strong> V-M-CACHE-ID</para>
+/// </remarks>
 public static class CacheIndexConfiguration
 {
     /// <summary>
     /// Ensures all needed indexes exist on the cache collections.
     /// Idempotent — safe to call on every startup.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> EnsureIndexesAsync</para>
+    /// <para><strong>@param database:</strong> IMongoDatabase instance</para>
+    /// <para><strong>@log-event:</strong> cache.index.ensure-start</para>
+    /// <para><strong>@log-event:</strong> cache.index.ensure-user-ttl</para>
+    /// <para><strong>@log-event:</strong> cache.index.ensure-user-unique</para>
+    /// <para><strong>@log-event:</strong> cache.index.ensure-role-ttl</para>
+    /// <para><strong>@log-event:</strong> cache.index.ensure-role-unique</para>
+    /// <para><strong>@log-event:</strong> cache.index.ensure-complete</para>
+    /// <para><strong>@trace-span:</strong> cache.index.ensure</para>
+    /// <para><strong>@complexity:</strong> O(1) (per-collection index creation)</para>
+    /// <para><strong>@idempotent:</strong> YES</para>
+    /// </remarks>
     public static async Task EnsureIndexesAsync(IMongoDatabase database)
     {
         var userCacheCollection = database.GetCollection<UserCacheEntry>("user_cache");
