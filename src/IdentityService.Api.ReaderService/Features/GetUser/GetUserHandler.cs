@@ -1,3 +1,10 @@
+// FILE: GetUserHandler.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: Business logic handler (M-IDENTITY-READER)
+// SEMANTIC_TAG: [HANDLER, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_READER
+
 // FILE: src/IdentityService.Api.ReaderService/Features/GetUser/GetUserHandler.cs
 // VERSION: 1.0.0
 

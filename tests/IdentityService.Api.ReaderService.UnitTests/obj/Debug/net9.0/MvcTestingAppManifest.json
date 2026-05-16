@@ -1,6 +1,0 @@
-{
-  "IdentityService.Api.ReaderService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/node\/.openclaw\/workspace-developer\/projects\/mif\/identity-service\/src\/IdentityService.Api.ReaderService",
-  "IdentityService.CacheLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/node\/.openclaw\/workspace-developer\/projects\/mif\/identity-service\/src\/IdentityService.CacheLayer",
-  "IdentityService.KeycloakAdapter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/node\/.openclaw\/workspace-developer\/projects\/mif\/identity-service\/src\/IdentityService.KeycloakAdapter",
-  "IdentityService.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/node\/.openclaw\/workspace-developer\/projects\/mif\/identity-service\/src\/IdentityService.Shared"
-}

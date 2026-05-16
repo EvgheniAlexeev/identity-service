@@ -1,3 +1,10 @@
+// FILE: DlqHandler.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: Business logic handler (M-IDENTITY-WORKER)
+// SEMANTIC_TAG: [HANDLER, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_WORKER
+
 using IdentityService.Shared.Events;
 using Microsoft.Extensions.Logging;
 

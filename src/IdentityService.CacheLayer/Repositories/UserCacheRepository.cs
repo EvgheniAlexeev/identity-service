@@ -1,3 +1,10 @@
+// FILE: UserCacheRepository.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY
+// PURPOSE: Data repository pattern (M-IDENTITY)
+// SEMANTIC_TAG: [REPOSITORY, DATA_ACCESS]
+// START_MODULE M_IDENTITY
+
 using IdentityService.CacheLayer.MongoDB;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -8,6 +15,17 @@ namespace IdentityService.CacheLayer.Repositories;
 /// BLOCK_CACHE_USER MongoDB-backed user cache repository.
 /// Uses TTL indexes for automatic expiration.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-CACHE</para>
+/// <para><strong>@purpose:</strong> MongoDB repository implementation for user identity cache with TTL-based expiration</para>
+/// <para><strong>@module-type:</strong> DATA_LAYER</para>
+/// <para><strong>@depends:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@domain-concept:</strong> UserCacheRepository</para>
+/// <para><strong>@invariant:</strong> All queries filter by ExpiresAt > UtcNow</para>
+/// <para><strong>@invariant:</strong> Upsert operations use ReplaceOneAsync with IsUpsert=true</para>
+/// <para><strong>@stability:</strong> STABLE</para>
+/// <para><strong>@verification-ref:</strong> V-M-CACHE-ID</para>
+/// </remarks>
 public class UserCacheRepository : IUserCacheRepository
 {
     private readonly CacheContext _context;

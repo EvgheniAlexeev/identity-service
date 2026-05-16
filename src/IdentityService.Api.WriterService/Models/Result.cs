@@ -1,3 +1,10 @@
+// FILE: Result.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WRITER
+// PURPOSE: M-IDENTITY-WRITER component
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_WRITER
+
 namespace IdentityService.Api.WriterService.Models;
 
 /// <summary>

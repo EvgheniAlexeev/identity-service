@@ -1,3 +1,10 @@
+// FILE: IdentityFailureCause.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-SHARED
+// PURPOSE: M-IDENTITY-SHARED component
+// SEMANTIC_TAG: [EVENT, MESSAGE]
+// START_MODULE M_IDENTITY_SHARED
+
 namespace IdentityService.Shared.Events;
 
 /// <summary>

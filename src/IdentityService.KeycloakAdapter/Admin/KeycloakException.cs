@@ -1,3 +1,10 @@
+// FILE: KeycloakException.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-KEYCLOAK
+// PURPOSE: Keycloak integration (M-IDENTITY-KEYCLOAK)
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_KEYCLOAK
+
 namespace IdentityService.KeycloakAdapter.Admin;
 
 /// <summary>

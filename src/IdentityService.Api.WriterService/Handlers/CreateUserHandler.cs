@@ -1,3 +1,10 @@
+// FILE: CreateUserHandler.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WRITER
+// PURPOSE: Business logic handler (M-IDENTITY-WRITER)
+// SEMANTIC_TAG: [HANDLER, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_WRITER
+
 using FluentValidation;
 using IdentityService.Api.WriterService.Models;
 using IdentityService.CacheLayer.MongoDB;

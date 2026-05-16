@@ -1,3 +1,10 @@
+// FILE: IGetUserHandler.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: Business logic handler (M-IDENTITY-READER)
+// SEMANTIC_TAG: [HANDLER, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_READER
+
 using IdentityService.Api.ReaderService.Models;
 using IdentityService.Shared.Dtos;
 

@@ -1,9 +1,27 @@
+// FILE: UserCreatedDto.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-SHARED
+// PURPOSE: Data transfer object (M-IDENTITY-SHARED)
+// SEMANTIC_TAG: [DTO, DATA_TRANSFER]
+// START_MODULE M_IDENTITY_SHARED
+
 namespace IdentityService.Shared.Dtos;
 
 /// <summary>
 /// BLOCK_CREATE_USER DTO for user provisioning requests.
 /// Contains PII (Email) — must be redacted in logs.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@purpose:</strong> DTO carrying user creation request with PII redaction requirements</para>
+/// <para><strong>@module-type:</strong> UTILITY</para>
+/// <para><strong>@domain-concept:</strong> UserCreatedDto (value object)</para>
+/// <para><strong>@invariant:</strong> Email is valid RFC 5322 format</para>
+/// <para><strong>@invariant:</strong> FirstName and LastName non-empty</para>
+/// <para><strong>@invariant:</strong> Email must be redacted in log output</para>
+/// <para><strong>@stability:</strong> STABLE</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED-ID</para>
+/// </remarks>
 public record UserCreatedDto
 {
     /// <summary>Unique user identifier.</summary>

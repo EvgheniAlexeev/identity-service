@@ -1,3 +1,10 @@
+// FILE: RoleDocumentDto.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-SHARED
+// PURPOSE: Data transfer object (M-IDENTITY-SHARED)
+// SEMANTIC_TAG: [DTO, DATA_TRANSFER]
+// START_MODULE M_IDENTITY_SHARED
+
 namespace IdentityService.Shared.Dtos;
 
 /// <summary>

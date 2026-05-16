@@ -1,3 +1,10 @@
+// FILE: SagaStepCommands.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: Domain command (M-IDENTITY-WORKER)
+// SEMANTIC_TAG: [COMMAND, MESSAGE]
+// START_MODULE M_IDENTITY_WORKER
+
 using IdentityService.Shared.Dtos;
 
 namespace IdentityService.WorkerService.Steps;

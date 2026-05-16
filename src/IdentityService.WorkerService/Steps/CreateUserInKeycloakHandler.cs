@@ -1,3 +1,10 @@
+// FILE: CreateUserInKeycloakHandler.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: Keycloak integration (M-IDENTITY-WORKER)
+// SEMANTIC_TAG: [HANDLER, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_WORKER
+
 using IdentityService.KeycloakAdapter.Admin;
 using IdentityService.WorkerService.Events;
 using IdentityService.WorkerService.Metrics;

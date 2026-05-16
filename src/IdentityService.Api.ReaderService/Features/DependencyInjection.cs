@@ -1,3 +1,10 @@
+// FILE: DependencyInjection.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: M-IDENTITY-READER component
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_READER
+
 // FILE: src/IdentityService.Api.ReaderService/Features/DependencyInjection.cs
 // VERSION: 1.0.0
 

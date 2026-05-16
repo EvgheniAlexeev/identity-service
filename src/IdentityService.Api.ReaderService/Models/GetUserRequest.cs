@@ -1,3 +1,10 @@
+// FILE: GetUserRequest.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: M-IDENTITY-READER component
+// SEMANTIC_TAG: [DTO, DATA_TRANSFER]
+// START_MODULE M_IDENTITY_READER
+
 namespace IdentityService.Api.ReaderService.Models;
 
 /// <summary>

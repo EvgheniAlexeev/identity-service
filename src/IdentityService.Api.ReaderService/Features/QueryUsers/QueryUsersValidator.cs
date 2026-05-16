@@ -1,3 +1,10 @@
+// FILE: QueryUsersValidator.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: Input validation (M-IDENTITY-READER)
+// SEMANTIC_TAG: [VALIDATOR, INPUT_VALIDATION]
+// START_MODULE M_IDENTITY_READER
+
 // FILE: src/IdentityService.Api.ReaderService/Features/QueryUsers/QueryUsersValidator.cs
 // VERSION: 1.0.0
 

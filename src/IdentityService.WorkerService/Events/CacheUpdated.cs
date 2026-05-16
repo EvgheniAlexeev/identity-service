@@ -1,3 +1,10 @@
+// FILE: CacheUpdated.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: Caching layer (M-IDENTITY-WORKER)
+// SEMANTIC_TAG: [EVENT, MESSAGE]
+// START_MODULE M_IDENTITY_WORKER
+
 namespace IdentityService.WorkerService.Events;
 
 /// <summary>

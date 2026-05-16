@@ -1,3 +1,10 @@
+// FILE: KeycloakRetryPolicy.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: Keycloak integration (M-IDENTITY-WORKER)
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_WORKER
+
 using IdentityService.WorkerService.Configuration;
 using IdentityService.WorkerService.Metrics;
 using Microsoft.Extensions.Configuration;

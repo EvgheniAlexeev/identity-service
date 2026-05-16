@@ -1,3 +1,10 @@
+// FILE: TokenValidator.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-KEYCLOAK
+// PURPOSE: Token validation and caching (M-IDENTITY-KEYCLOAK)
+// SEMANTIC_TAG: [VALIDATOR, INPUT_VALIDATION]
+// START_MODULE M_IDENTITY_KEYCLOAK
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
