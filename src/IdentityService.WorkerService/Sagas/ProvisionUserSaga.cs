@@ -14,6 +14,18 @@ namespace IdentityService.WorkerService.Sagas;
 /// Manual compensation via DLQ only (no automatic compensation).
 /// Role-based DLQ access: operators review failed saga state + original request.
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-IDENTITY-WORKER</para>
+/// <para><strong>@purpose:</strong> Saga orchestrator for user provisioning with Wolverine: Create → Cache → Notify</para>
+/// <para><strong>@module-type:</strong> CORE_LOGIC</para>
+/// <para><strong>@depends:</strong> M-IDENTITY-SHARED, M-IDENTITY-CACHE, M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@domain-concept:</strong> ProvisionUserSaga (aggregate root)</para>
+/// <para><strong>@invariant:</strong> State: Pending → CreatingInKeycloak → PopulatingCache → Completed/Failed</para>
+/// <para><strong>@invariant:</strong> Cache populated with TTL on saga completion</para>
+/// <para><strong>@invariant:</strong> Failed operations published to DLQ with original request</para>
+/// <para><strong>@stability:</strong> EVOLVING (Phase-5 in progress)</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER-ID</para>
+/// </remarks>
 public class ProvisionUserSaga
 {
     private readonly ILogger<ProvisionUserSaga> _logger;
@@ -43,6 +55,18 @@ public class ProvisionUserSaga
     /// Saga entry point: receives ProvisionUserCommand and starts the orchestration.
     /// Sets up initial saga state and sends the first step command.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> HandleAsync (Start)</para>
+    /// <para><strong>@param command:</strong> ProvisionUserCommand with user data</para>
+    /// <para><strong>@return:</strong> CreateUserInKeycloakCommand for first step</para>
+    /// <para><strong>@log-event:</strong> worker.saga.provision-start {correlationId} {userId}</para>
+    /// <para><strong>@log-event:</strong> worker.saga.idempotency-check {correlationId}</para>
+    /// <para><strong>@trace-span:</strong> worker.saga.provision-start</para>
+    /// <para><strong>@pre-condition:</strong> command != null && command.IdempotencyKey != null</para>
+    /// <para><strong>@post-condition:</strong> Data.CorrelationId != null && Data.Status == "Provisioning"</para>
+    /// <para><strong>@complexity:</strong> O(1)</para>
+    /// <para><strong>@idempotent:</strong> YES (ledger-based via audit history)</para>
+    /// </remarks>
     public async Task<object> HandleAsync(
         ProvisionUserCommand command,
         CancellationToken ct)
@@ -102,6 +126,16 @@ public class ProvisionUserSaga
     /// On success: proceeds to UpdateCache.
     /// On failure: publishes to DLQ with full context.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> HandleAsync (KeycloakResponse)</para>
+    /// <para><strong>@param event:</strong> UserCreatedInKeycloak with Keycloak-assigned userId</para>
+    /// <para><strong>@return:</strong> UpdateUserCacheCommand for next step</para>
+    /// <para><strong>@log-event:</strong> worker.saga.keycloak-response {correlationId} {keycloakUserId}</para>
+    /// <para><strong>@trace-span:</strong> worker.saga.keycloak-response</para>
+    /// <para><strong>@pre-condition:</strong> @event != null && @event.KeycloakUserId != null</para>
+    /// <para><strong>@post-condition:</strong> Data.CurrentStep == "UpdateCache"</para>
+    /// <para><strong>@idempotent:</strong> YES</para>
+    /// </remarks>
     public async Task<object> HandleAsync(
         UserCreatedInKeycloak @event,
         CancellationToken ct)
@@ -142,6 +176,14 @@ public class ProvisionUserSaga
     /// On success: proceeds to Notify step.
     /// On failure: publishes to DLQ.
     /// </summary>
+    /// <remarks>
+    /// <para><strong>@contract-action:</strong> HandleAsync (CacheResponse)</para>
+    /// <para><strong>@param event:</strong> CacheUpdated with user cache confirmation</para>
+    /// <para><strong>@return:</strong> NotifyAdminsCommand for final notification</para>
+    /// <para><strong>@log-event:</strong> worker.saga.cache-response {correlationId} {userId}</para>
+    /// <para><strong>@trace-span:</strong> worker.saga.cache-response</para>
+    /// <para><strong>@idempotent:</strong> YES</para>
+    /// </remarks>
     public async Task<object> HandleAsync(
         CacheUpdated @event,
         CancellationToken ct)
