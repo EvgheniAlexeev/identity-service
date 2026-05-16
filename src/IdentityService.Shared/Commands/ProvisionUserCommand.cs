@@ -10,7 +10,7 @@ using IdentityService.Shared.Dtos;
 namespace IdentityService.Shared.Commands;
 
 /// <summary>
-/// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@contract:</strong> M-SHARED</para>
 /// <para><strong>@purpose:</strong> Wolverine command to provision a user in Keycloak and populate cache</para>
 /// <para><strong>@invariant:</strong> IdempotencyKey must be non-empty</para>
 /// <para><strong>@verification-ref:</strong> V-M-SHARED</para>

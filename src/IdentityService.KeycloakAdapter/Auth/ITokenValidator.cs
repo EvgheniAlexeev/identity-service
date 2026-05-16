@@ -11,11 +11,11 @@ namespace IdentityService.KeycloakAdapter.Auth;
 /// BLOCK_TOKEN_VALIDATE token validation interface.
 /// </summary>
 /// <remarks>
-/// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@contract:</strong> M-KEYCLOAK</para>
 /// <para><strong>@purpose:</strong> JWT token validation with cached JWKS (JSON Web Key Set)</para>
 /// <para><strong>@invariant:</strong> JWKS cache TTL: 1 hour, stampede prevention enabled</para>
 /// <para><strong>@invariant:</strong> Validates JWT issuer matches configured Keycloak instance</para>
-/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK</para>
 /// </remarks>
 public interface ITokenValidator
 {

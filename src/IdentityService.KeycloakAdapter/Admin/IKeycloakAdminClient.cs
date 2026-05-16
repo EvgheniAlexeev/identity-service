@@ -14,11 +14,11 @@ namespace IdentityService.KeycloakAdapter.Admin;
 /// BLOCK_KEYCLOAK_ADMIN client interface for Keycloak admin operations.
 /// </summary>
 /// <remarks>
-/// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@contract:</strong> M-KEYCLOAK</para>
 /// <para><strong>@purpose:</strong> Adapter interface for Keycloak admin API operations (CreateUser, AssignRole, GetUser, DeleteUser)</para>
 /// <para><strong>@invariant:</strong> Admin operations use authenticated Keycloak client</para>
 /// <para><strong>@invariant:</strong> All operations throw HttpException on API failure</para>
-/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK</para>
 /// </remarks>
 public interface IKeycloakAdminClient
 {

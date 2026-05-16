@@ -16,11 +16,11 @@ namespace IdentityService.CacheLayer.Repositories;
 /// Uses TTL indexes for automatic expiration.
 /// </summary>
 /// <remarks>
-/// <para><strong>@contract:</strong> M-IDENTITY-CACHE</para>
+/// <para><strong>@contract:</strong> M-CACHE</para>
 /// <para><strong>@purpose:</strong> MongoDB repository implementation for user identity cache with TTL-based expiration</para>
 /// <para><strong>@invariant:</strong> All queries filter by ExpiresAt > UtcNow</para>
 /// <para><strong>@invariant:</strong> Upsert operations use ReplaceOneAsync with IsUpsert=true</para>
-/// <para><strong>@verification-ref:</strong> V-M-CACHE-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-CACHE</para>
 /// </remarks>
 public class UserCacheRepository : IUserCacheRepository
 {
