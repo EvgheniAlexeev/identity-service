@@ -10,15 +10,16 @@ using IdentityService.Shared.Dtos;
 namespace IdentityService.Shared.Commands;
 
 /// <summary>
-/// BLOCK_PROVISION_USER command — Wolverine command to provision a user
-/// in Keycloak and populate the cache.
+/// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@purpose:</strong> Wolverine command to provision a user in Keycloak and populate cache</para>
+/// <para><strong>@invariant:</strong> IdempotencyKey must be non-empty</para>
+/// <para><strong>@verification-ref:</strong> V-M-IDENTITY-SHARED</para>
 /// </summary>
+// START_BLOCK_PROVISION_USER
 public record ProvisionUserCommand : ICommand
 {
-    /// <summary>Idempotency key for deduplication.</summary>
     public string IdempotencyKey { get; init; } = string.Empty;
 
-    /// <summary>The user creation request payload.</summary>
     public UserCreatedDto User { get; init; } = new();
 }
 

@@ -10,14 +10,15 @@ using IdentityService.Shared.Dtos;
 namespace IdentityService.Shared.Commands;
 
 /// <summary>
-/// BLOCK_SYNC_ROLE command — Wolverine command to sync a role
-/// from Keycloak into the cache.
+/// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@purpose:</strong> Wolverine command to sync a role from Keycloak into cache</para>
+/// <para><strong>@invariant:</strong> IdempotencyKey must be non-empty</para>
+/// <para><strong>@verification-ref:</strong> V-M-IDENTITY-SHARED</para>
 /// </summary>
+// START_BLOCK_SYNC_ROLE
 public record SyncRoleCommand : ICommand
 {
-    /// <summary>Idempotency key for deduplication.</summary>
     public string IdempotencyKey { get; init; } = string.Empty;
 
-    /// <summary>The role to sync.</summary>
     public RoleAssignDto Role { get; init; } = new();
 }
