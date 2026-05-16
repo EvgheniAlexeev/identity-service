@@ -1,3 +1,10 @@
+// FILE: DependencyInjection.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY
+// PURPOSE: M-IDENTITY component
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY
+
 using IdentityService.CacheLayer.MongoDB;
 using IdentityService.CacheLayer.Repositories;
 using Microsoft.Extensions.DependencyInjection;

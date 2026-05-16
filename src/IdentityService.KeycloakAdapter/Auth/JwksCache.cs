@@ -1,3 +1,10 @@
+// FILE: JwksCache.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-KEYCLOAK
+// PURPOSE: Caching layer (M-IDENTITY-KEYCLOAK)
+// SEMANTIC_TAG: [AUTH, SECURITY]
+// START_MODULE M_IDENTITY_KEYCLOAK
+
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;

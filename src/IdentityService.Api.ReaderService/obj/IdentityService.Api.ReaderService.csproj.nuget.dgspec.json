@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj": {}
+    "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj": {}
   },
   "projects": {
-    "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj": {
+    "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj",
+        "projectUniqueName": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj",
         "projectName": "IdentityService.Api.ReaderService",
-        "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj",
-        "packagesPath": "/home/node/.nuget/packages/",
-        "outputPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Api.ReaderService/obj/",
+        "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Api.ReaderService/IdentityService.Api.ReaderService.csproj",
+        "packagesPath": "/home/ualex/.nuget/packages/",
+        "outputPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Api.ReaderService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/node/.nuget/NuGet/NuGet.Config"
+          "/home/ualex/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -26,14 +26,14 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj": {
-                "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj"
+              "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj": {
+                "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj"
               },
-              "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj": {
-                "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj"
+              "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj": {
+                "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj"
               },
-              "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
-                "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj"
+              "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
+                "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj"
               }
             }
           }
@@ -78,21 +78,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj": {
+    "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj",
+        "projectUniqueName": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj",
         "projectName": "IdentityService.CacheLayer",
-        "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj",
-        "packagesPath": "/home/node/.nuget/packages/",
-        "outputPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/",
+        "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.CacheLayer/IdentityService.CacheLayer.csproj",
+        "packagesPath": "/home/ualex/.nuget/packages/",
+        "outputPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.CacheLayer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/node/.nuget/NuGet/NuGet.Config"
+          "/home/ualex/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -104,8 +104,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
-                "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj"
+              "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
+                "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj"
               }
             }
           }
@@ -155,21 +155,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj": {
+    "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj",
+        "projectUniqueName": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj",
         "projectName": "IdentityService.KeycloakAdapter",
-        "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj",
-        "packagesPath": "/home/node/.nuget/packages/",
-        "outputPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/obj/",
+        "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/IdentityService.KeycloakAdapter.csproj",
+        "packagesPath": "/home/ualex/.nuget/packages/",
+        "outputPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.KeycloakAdapter/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/node/.nuget/NuGet/NuGet.Config"
+          "/home/ualex/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -181,8 +181,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
-                "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj"
+              "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
+                "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj"
               }
             }
           }
@@ -244,21 +244,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
+    "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj",
+        "projectUniqueName": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj",
         "projectName": "IdentityService.Shared",
-        "projectPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj",
-        "packagesPath": "/home/node/.nuget/packages/",
-        "outputPath": "/home/node/.openclaw/workspace-developer/projects/mif/identity-service/src/IdentityService.Shared/obj/",
+        "projectPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/IdentityService.Shared.csproj",
+        "packagesPath": "/home/ualex/.nuget/packages/",
+        "outputPath": "/home/ualex/.openclaw/_bmad-shared/projects/mif/identity-service/src/IdentityService.Shared/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/node/.nuget/NuGet/NuGet.Config"
+          "/home/ualex/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -313,7 +313,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/node/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/ualex/.dotnet/sdk/9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

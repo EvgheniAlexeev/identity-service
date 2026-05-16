@@ -1,3 +1,10 @@
+// FILE: IRoleCacheRepository.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY
+// PURPOSE: Data repository pattern (M-IDENTITY)
+// SEMANTIC_TAG: [REPOSITORY, DATA_ACCESS]
+// START_MODULE M_IDENTITY
+
 using IdentityService.CacheLayer.MongoDB;
 
 namespace IdentityService.CacheLayer.Repositories;

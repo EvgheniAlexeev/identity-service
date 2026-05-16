@@ -1,3 +1,10 @@
+// FILE: FailedIdentityEvent.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-SHARED
+// PURPOSE: Domain event (M-IDENTITY-SHARED)
+// SEMANTIC_TAG: [EVENT, MESSAGE]
+// START_MODULE M_IDENTITY_SHARED
+
 using IdentityService.Shared.Dtos;
 
 namespace IdentityService.Shared.Events;

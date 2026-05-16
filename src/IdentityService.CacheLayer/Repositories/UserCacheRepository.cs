@@ -1,3 +1,10 @@
+// FILE: UserCacheRepository.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY
+// PURPOSE: Data repository pattern (M-IDENTITY)
+// SEMANTIC_TAG: [REPOSITORY, DATA_ACCESS]
+// START_MODULE M_IDENTITY
+
 using IdentityService.CacheLayer.MongoDB;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;

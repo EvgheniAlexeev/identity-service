@@ -1,3 +1,10 @@
+// FILE: UserQueryController.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: HTTP API controller (M-IDENTITY-READER)
+// SEMANTIC_TAG: [HTTP_CONTROLLER, API]
+// START_MODULE M_IDENTITY_READER
+
 using IdentityService.Api.ReaderService.Handlers;
 using IdentityService.Api.ReaderService.Models;
 using IdentityService.Api.ReaderService.Validators;

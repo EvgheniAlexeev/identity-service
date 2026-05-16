@@ -1,3 +1,10 @@
+// FILE: SyncRoleCommand.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-SHARED
+// PURPOSE: Domain command (M-IDENTITY-SHARED)
+// SEMANTIC_TAG: [COMMAND, MESSAGE]
+// START_MODULE M_IDENTITY_SHARED
+
 using IdentityService.Shared.Dtos;
 
 namespace IdentityService.Shared.Commands;

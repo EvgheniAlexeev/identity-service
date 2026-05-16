@@ -1,3 +1,10 @@
+// FILE: GetUserRequestValidator.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: Input validation (M-IDENTITY-READER)
+// SEMANTIC_TAG: [VALIDATOR, INPUT_VALIDATION]
+// START_MODULE M_IDENTITY_READER
+
 using FluentValidation;
 using IdentityService.Api.ReaderService.Models;
 using Microsoft.Extensions.Logging;

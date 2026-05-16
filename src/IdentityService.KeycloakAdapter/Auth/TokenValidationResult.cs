@@ -1,3 +1,10 @@
+// FILE: TokenValidationResult.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-KEYCLOAK
+// PURPOSE: Token validation and caching (M-IDENTITY-KEYCLOAK)
+// SEMANTIC_TAG: [AUTH, SECURITY]
+// START_MODULE M_IDENTITY_KEYCLOAK
+
 using System.Security.Claims;
 
 namespace IdentityService.KeycloakAdapter.Auth;

@@ -1,3 +1,10 @@
+// FILE: UserCreatedInKeycloak.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: Keycloak integration (M-IDENTITY-WORKER)
+// SEMANTIC_TAG: [EVENT, MESSAGE]
+// START_MODULE M_IDENTITY_WORKER
+
 using IdentityService.Shared.Dtos;
 
 namespace IdentityService.WorkerService.Events;

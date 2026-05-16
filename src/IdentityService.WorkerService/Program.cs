@@ -1,3 +1,10 @@
+// FILE: Program.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: M-IDENTITY-WORKER component
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_WORKER
+
 // START_MODULE_CONTRACT
 //   PURPOSE: Saga processor service — ProvisionUserSaga (Keycloak create→cache→notify+DLQ),
 //            Polly retry policy for Keycloak HTTP calls, Prometheus metrics, DLQ integration.

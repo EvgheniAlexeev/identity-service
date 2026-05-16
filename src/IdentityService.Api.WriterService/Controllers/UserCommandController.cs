@@ -1,3 +1,10 @@
+// FILE: UserCommandController.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WRITER
+// PURPOSE: Domain command (M-IDENTITY-WRITER)
+// SEMANTIC_TAG: [COMMAND, MESSAGE]
+// START_MODULE M_IDENTITY_WRITER
+
 using IdentityService.Api.WriterService.Handlers;
 using IdentityService.Api.WriterService.Models;
 using Microsoft.AspNetCore.Mvc;

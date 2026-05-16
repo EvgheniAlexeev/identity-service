@@ -1,3 +1,10 @@
+// FILE: CacheIndexConfiguration.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY
+// PURPOSE: Configuration and setup (M-IDENTITY)
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY
+
 using MongoDB.Driver;
 
 namespace IdentityService.CacheLayer.MongoDB;

@@ -1,3 +1,10 @@
+// FILE: ProvisionUserSagaState.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-WORKER
+// PURPOSE: M-IDENTITY-WORKER component
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_WORKER
+
 using IdentityService.Shared.Dtos;
 
 namespace IdentityService.WorkerService.Sagas;

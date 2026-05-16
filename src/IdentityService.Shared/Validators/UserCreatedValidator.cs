@@ -1,3 +1,10 @@
+// FILE: UserCreatedValidator.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-SHARED
+// PURPOSE: Input validation (M-IDENTITY-SHARED)
+// SEMANTIC_TAG: [VALIDATOR, INPUT_VALIDATION]
+// START_MODULE M_IDENTITY_SHARED
+
 using FluentValidation;
 using IdentityService.Shared.Dtos;
 using Microsoft.Extensions.Logging;

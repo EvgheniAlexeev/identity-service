@@ -1,3 +1,10 @@
+// FILE: DependencyInjection.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-KEYCLOAK
+// PURPOSE: M-IDENTITY-KEYCLOAK component
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_KEYCLOAK
+
 using IdentityService.KeycloakAdapter.Admin;
 using IdentityService.KeycloakAdapter.Auth;
 using IdentityService.KeycloakAdapter.Models;

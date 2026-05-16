@@ -1,3 +1,10 @@
+// FILE: DependencyInjection.cs
+// VERSION: 2.0.0
+// MODULE: M-IDENTITY-READER
+// PURPOSE: M-IDENTITY-READER component
+// SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
+// START_MODULE M_IDENTITY_READER
+
 using IdentityService.Api.ReaderService.Features;
 using IdentityService.Api.ReaderService.Handlers;
 using IdentityService.Api.ReaderService.Validators;
