@@ -66,6 +66,15 @@
         <log-marker>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_FAILURE]</log-marker>
       </required-signals>
     </VF-006>
+
+    <VF-007 NAME="SyncRoleIdempotency" USE_CASES="UC-003" DATA_FLOW="DF-SAGA-SYNC" PRIORITY="critical">
+      <scenario>Duplicate SyncRoleCommand with same IdempotencyKey — saga skips re-execution and returns RoleSynced immediately</scenario>
+      <expected-outcome>If saga already completed (AuditHistory contains Completed/Success), HandleAsync returns RoleSynced without calling Keycloak or cache. Warning logged. Idempotency enforced by saga state lookup.</expected-outcome>
+      <required-signals>
+        <log-marker>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_IDEMPOTENCY_CHECK]</log-marker>
+        <trace-condition>AuditHistory contains StepName=Completed AND Outcome=Success</trace-condition>
+      </required-signals>
+    </VF-007>
   </CriticalFlows>
 
   <ModuleVerification>
