@@ -1,25 +1,25 @@
 <KnowledgeGraph>
-  <Project NAME="IdentityService (MIF)" VERSION="0.2.0">
+  <Project NAME="IdentityService (MIF)" VERSION="0.3.0">
     <keywords>mif, identity-management, keycloak, cqrs, reader, writer, worker</keywords>
     <annotation>User and role management in MIF. IdentityService.Api.ReaderService (query cache), IdentityService.Api.WriterService (command gateway), IdentityService.WorkerService (saga processor + Keycloak sync).</annotation>
 
-    <M-SHARED NAME="IdentityService.Shared" TYPE="UTILITY" STATUS="planned">
+    <M-SHARED NAME="IdentityService.Shared" TYPE="UTILITY" STATUS="implemented">
       <purpose>User, role, event DTOs shared across Reader, Writer, Worker</purpose>
       <path>src/IdentityService.Shared/</path>
       <depends>none</depends>
     </M-SHARED>
 
-    <M-READER NAME="IdentityService.Api.ReaderService" TYPE="ENTRY_POINT" STATUS="planned">
+    <M-READER NAME="IdentityService.Api.ReaderService" TYPE="ENTRY_POINT" STATUS="implemented">
       <purpose>Query-only API: user/role cache from MongoDB, token introspection</purpose>
       <path>src/IdentityService.Api.ReaderService/</path>
-      <depends>M-SHARED, M-CACHE</depends>
+      <depends>M-SHARED, M-CACHE, M-KEYCLOAK</depends>
       <annotations>
         <export-GetUser PURPOSE="GET /api/users/{userId}" />
         <export-PostIntrospect PURPOSE="POST /api/introspect - token validation" />
       </annotations>
     </M-READER>
 
-    <M-WRITER NAME="IdentityService.Api.WriterService" TYPE="ENTRY_POINT" STATUS="planned">
+    <M-WRITER NAME="IdentityService.Api.WriterService" TYPE="ENTRY_POINT" STATUS="implemented">
       <purpose>Command gateway API: routes user provisioning and role sync commands to MQ</purpose>
       <path>src/IdentityService.Api.WriterService/</path>
       <depends>M-SHARED</depends>
@@ -29,17 +29,17 @@
       </annotations>
     </M-WRITER>
 
-    <M-WORKER NAME="IdentityService.WorkerService" TYPE="CORE_LOGIC" STATUS="planned">
+    <M-WORKER NAME="IdentityService.WorkerService" TYPE="CORE_LOGIC" STATUS="implemented">
       <purpose>Saga processor: provision users and sync roles bidirectionally with Keycloak</purpose>
       <path>src/IdentityService.WorkerService/</path>
       <depends>M-SHARED, M-KEYCLOAK, M-CACHE</depends>
       <annotations>
         <class-ProvisionUserSaga PURPOSE="User provision saga: Keycloak → MongoDB" />
-        <class-SyncRoleSaga PURPOSE="Role sync saga: bidirectional Keycloak ↔ MongoDB" />
+        <class-SyncRoleSaga PURPOSE="Role sync saga: bidirectional Keycloak ↔ MongoDB (PENDING)" />
       </annotations>
     </M-WORKER>
 
-    <M-KEYCLOAK NAME="IdentityService.KeycloakAdapter" TYPE="INTEGRATION" STATUS="planned">
+    <M-KEYCLOAK NAME="IdentityService.KeycloakAdapter" TYPE="INTEGRATION" STATUS="implemented">
       <purpose>Keycloak admin API client + JWT validator with JWKS cache</purpose>
       <path>src/IdentityService.KeycloakAdapter/</path>
       <depends>none</depends>
@@ -49,7 +49,7 @@
       </annotations>
     </M-KEYCLOAK>
 
-    <M-CACHE NAME="IdentityService.CacheLayer" TYPE="DATA_LAYER" STATUS="planned">
+    <M-CACHE NAME="IdentityService.CacheLayer" TYPE="DATA_LAYER" STATUS="implemented">
       <purpose>MongoDB user/role cache: fast queries without Keycloak calls</purpose>
       <path>src/IdentityService.CacheLayer/</path>
       <depends>none</depends>
