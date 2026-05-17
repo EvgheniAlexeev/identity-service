@@ -1,6 +1,6 @@
 // FILE: IKeycloakAdminClient.cs
 // VERSION: 2.0.0
-// MODULE: M-IDENTITY-KEYCLOAK
+// MODULE: M-KEYCLOAK
 // PURPOSE: Keycloak integration (M-IDENTITY-KEYCLOAK)
 // SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
 // START_MODULE M_IDENTITY_KEYCLOAK
@@ -14,15 +14,13 @@ namespace IdentityService.KeycloakAdapter.Admin;
 /// BLOCK_KEYCLOAK_ADMIN client interface for Keycloak admin operations.
 /// </summary>
 /// <remarks>
-/// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@contract:</strong> M-KEYCLOAK</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Adapter interface for Keycloak admin API operations (CreateUser, AssignRole, GetUser, DeleteUser)</para>
-/// <para><strong>@module-type:</strong> INTEGRATION</para>
-/// <para><strong>@depends:</strong> M-IDENTITY-SHARED</para>
-/// <para><strong>@domain-concept:</strong> IKeycloakAdminClient</para>
 /// <para><strong>@invariant:</strong> Admin operations use authenticated Keycloak client</para>
 /// <para><strong>@invariant:</strong> All operations throw HttpException on API failure</para>
-/// <para><strong>@stability:</strong> STABLE</para>
-/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK</para>
 /// </remarks>
 public interface IKeycloakAdminClient
 {

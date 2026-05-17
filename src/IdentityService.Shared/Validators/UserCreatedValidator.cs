@@ -1,6 +1,6 @@
 // FILE: UserCreatedValidator.cs
 // VERSION: 2.0.0
-// MODULE: M-IDENTITY-SHARED
+// MODULE: M-SHARED
 // PURPOSE: Input validation (M-IDENTITY-SHARED)
 // SEMANTIC_TAG: [VALIDATOR, INPUT_VALIDATION]
 // START_MODULE M_IDENTITY_SHARED
@@ -17,14 +17,13 @@ namespace IdentityService.Shared.Validators;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> FluentValidation validator for UserCreatedDto with semantic logging</para>
-/// <para><strong>@module-type:</strong> UTILITY</para>
-/// <para><strong>@domain-concept:</strong> UserCreatedValidator</para>
 /// <para><strong>@invariant:</strong> Email format valid (RFC 5322)</para>
 /// <para><strong>@invariant:</strong> Names non-empty, max 100 chars</para>
 /// <para><strong>@invariant:</strong> UserId max 100 chars</para>
-/// <para><strong>@stability:</strong> STABLE</para>
-/// <para><strong>@verification-ref:</strong> V-M-SHARED-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
 /// </remarks>
 public class UserCreatedValidator : AbstractValidator<UserCreatedDto>
 {

@@ -17,14 +17,12 @@ namespace IdentityService.Api.ReaderService.Controllers;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-READER</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> Provides HTTP query endpoints for role retrieval from cache with fallback validation</para>
-/// <para><strong>@module-type:</strong> ENTRY_POINT</para>
-/// <para><strong>@depends:</strong> M-IDENTITY-CACHE, M-IDENTITY-SHARED</para>
-/// <para><strong>@domain-concept:</strong> RolesController</para>
 /// <para><strong>@invariant:</strong> Cache hit ≥ 95%</para>
 /// <para><strong>@invariant:</strong> Response latency p99 ≤ 50ms (cache hit)</para>
-/// <para><strong>@stability:</strong> STABLE</para>
-/// <para><strong>@verification-ref:</strong> V-M-READER-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-READER</para>
 /// </remarks>
 [ApiController]
 [Route("api/roles")]

@@ -10,8 +10,15 @@ using IdentityService.Shared.Dtos;
 namespace IdentityService.WorkerService.Events;
 
 /// <summary>
-/// BLOCK_USER_CREATED_IN_KEYCLOAK event — internal saga event emitted after Keycloak user creation.
+/// Component of the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (component)</para>
+/// <para><strong>@purpose:</strong> Component of the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> All properties are immutable after construction</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public record UserCreatedInKeycloak
 {
     public string CorrelationId { get; init; } = string.Empty;

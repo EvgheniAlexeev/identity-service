@@ -10,10 +10,15 @@ using IdentityService.Shared.Dtos;
 namespace IdentityService.WorkerService.Sagas;
 
 /// <summary>
-/// BLOCK_SAGA_STATE Saga state document for the ProvisionUserSaga.
-/// Persisted in MongoDB with TTL index for auto-cleanup.
-/// Tracks every step attempt, failure, and outcome for full audit history.
+/// Saga state document persisted in MongoDB for the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (saga state document, persists saga lifecycle to MongoDB)</para>
+/// <para><strong>@purpose:</strong> Saga state document persisted in MongoDB for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> Saga state captures all lifecycle data; TTL index auto-expires after configured duration</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class ProvisionUserSagaState
 {
     /// <summary>

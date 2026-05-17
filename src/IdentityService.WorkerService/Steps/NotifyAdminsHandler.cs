@@ -11,9 +11,15 @@ using Microsoft.Extensions.Logging;
 namespace IdentityService.WorkerService.Steps;
 
 /// <summary>
-/// BLOCK_NOTIFY Step handler for notifying administrators about provisioning completion.
-/// This is a fire-and-forget step — notifications are best-effort and do not fail the saga.
+/// Step handler processing Wolverine commands for the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (step handler, processes Wolverine commands)</para>
+/// <para><strong>@purpose:</strong> Step handler processing Wolverine commands for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> All operations logged with [BLOCK_*] markers for end-to-end traceability</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class NotifyAdminsHandler
 {
     private readonly ILogger<NotifyAdminsHandler> _logger;

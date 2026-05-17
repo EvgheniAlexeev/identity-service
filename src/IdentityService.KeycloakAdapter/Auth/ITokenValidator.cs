@@ -1,6 +1,6 @@
 // FILE: ITokenValidator.cs
 // VERSION: 2.0.0
-// MODULE: M-IDENTITY-KEYCLOAK
+// MODULE: M-KEYCLOAK
 // PURPOSE: Token validation and caching (M-IDENTITY-KEYCLOAK)
 // SEMANTIC_TAG: [VALIDATOR, INPUT_VALIDATION]
 // START_MODULE M_IDENTITY_KEYCLOAK
@@ -11,15 +11,13 @@ namespace IdentityService.KeycloakAdapter.Auth;
 /// BLOCK_TOKEN_VALIDATE token validation interface.
 /// </summary>
 /// <remarks>
-/// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@contract:</strong> M-KEYCLOAK</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> JWT token validation with cached JWKS (JSON Web Key Set)</para>
-/// <para><strong>@module-type:</strong> INTEGRATION</para>
-/// <para><strong>@depends:</strong> M-IDENTITY-SHARED</para>
-/// <para><strong>@domain-concept:</strong> ITokenValidator</para>
 /// <para><strong>@invariant:</strong> JWKS cache TTL: 1 hour, stampede prevention enabled</para>
 /// <para><strong>@invariant:</strong> Validates JWT issuer matches configured Keycloak instance</para>
-/// <para><strong>@stability:</strong> STABLE</para>
-/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK-ID</para>
+/// <para><strong>@verification-ref:</strong> V-M-KEYCLOAK</para>
 /// </remarks>
 public interface ITokenValidator
 {

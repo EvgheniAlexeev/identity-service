@@ -1,6 +1,6 @@
 // FILE: JwksCache.cs
 // VERSION: 2.0.0
-// MODULE: M-IDENTITY-KEYCLOAK
+// MODULE: M-KEYCLOAK
 // PURPOSE: Caching layer (M-IDENTITY-KEYCLOAK)
 // SEMANTIC_TAG: [AUTH, SECURITY]
 // START_MODULE M_IDENTITY_KEYCLOAK
@@ -17,11 +17,11 @@ namespace IdentityService.KeycloakAdapter.Auth;
 /// </summary>
 /// <remarks>
 /// <para><strong>@contract:</strong> M-IDENTITY-KEYCLOAK</para>
+/// <para><strong>@version:</strong> 2.1.0</para>
+/// <para><strong>@since:</strong> 2.0.0</para>
 /// <para><strong>@purpose:</strong> In-memory JWKS cache with TTL and stampede prevention for JWT validation</para>
-/// <para><strong>@module-type:</strong> INTEGRATION</para>
 /// <para><strong>@invariant:</strong> Cache TTL: 1 hour (configurable)</para>
 /// <para><strong>@invariant:</strong> Stampede prevention: single concurrent refresh via SemaphoreSlim</para>
-/// <para><strong>@stability:</strong> STABLE</para>
 /// </remarks>
 public class JwksCache
 {

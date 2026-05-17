@@ -11,11 +11,15 @@ using Microsoft.Extensions.Logging;
 namespace IdentityService.WorkerService.Sagas;
 
 /// <summary>
-/// BLOCK_DLQ_HANDLER Dead-Letter Queue handler for failed identity operations.
-/// Provides role-based DLQ access: operators review failed saga state and decide
-/// whether to retry, manually intervene, or contact the customer.
-/// Full audit history is preserved in the FailedIdentityEvent.
+/// Step handler processing Wolverine commands for the M-WORKER module
 /// </summary>
+/// <remarks>
+/// <para><strong>@contract:</strong> M-WORKER (step handler, processes Wolverine commands)</para>
+/// <para><strong>@purpose:</strong> Step handler processing Wolverine commands for the M-WORKER module</para>
+/// <para><strong>@invariant:</strong> All operations logged with [BLOCK_*] markers for end-to-end traceability</para>
+/// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
+/// </remarks>
+
 public class DlqHandler
 {
     private readonly ILogger<DlqHandler> _logger;
