@@ -376,7 +376,7 @@ public class SyncRoleSagaTests
         final.RoleId.Should().Be("role-full");
         final.RoleName.Should().Be("FullRole");
         _saga.Data.Status.Should().Be("Completed");
-        _saga.Data.AuditHistory.Should().HaveCount(4); // AssignInKeycloak + UpdateRoleCache + InvalidateUserCache + Completed
+        _saga.Data.AuditHistory.Should().HaveCount(3); // AssignInKeycloak + UpdateRoleCache + Completed (InvalidateUserCache is implicit, not a separate audit step)
     }
 
     [Fact]
