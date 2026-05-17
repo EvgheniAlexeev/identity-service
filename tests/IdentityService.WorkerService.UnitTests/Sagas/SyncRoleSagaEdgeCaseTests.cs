@@ -3,6 +3,7 @@ using IdentityService.CacheLayer.Repositories;
 using IdentityService.KeycloakAdapter.Admin;
 using IdentityService.Shared.Commands;
 using IdentityService.Shared.Dtos;
+using IdentityService.Shared.Events;
 using IdentityService.WorkerService.Metrics;
 using IdentityService.WorkerService.Sagas;
 using IdentityService.WorkerService.Steps;
