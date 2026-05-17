@@ -50,3 +50,40 @@ public record NotifyCommand
     public string Email { get; init; } = string.Empty;
     public string Status { get; init; } = string.Empty;
 }
+
+// ──────────────────────────────────────────────────────────────
+// SyncRoleSaga Step Commands
+// ──────────────────────────────────────────────────────────────
+
+/// <summary>
+/// Command to assign a role to a user in Keycloak as part of SyncRoleSaga.
+/// </summary>
+public record AssignRoleInKeycloakCommand
+{
+    public string CorrelationId { get; init; } = string.Empty;
+    public string UserId { get; init; } = string.Empty;
+    public string KeycloakUserId { get; init; } = string.Empty;
+    public string RoleId { get; init; } = string.Empty;
+    public string RoleName { get; init; } = string.Empty;
+    public int Attempt { get; init; } = 1;
+}
+
+/// <summary>
+/// Command to update the role cache in MongoDB as part of SyncRoleSaga.
+/// </summary>
+public record UpdateRoleCacheStepCommand
+{
+    public string CorrelationId { get; init; } = string.Empty;
+    public string RoleId { get; init; } = string.Empty;
+    public string RoleName { get; init; } = string.Empty;
+    public List<string> Permissions { get; init; } = new();
+}
+
+/// <summary>
+/// Command to invalidate the user cache entry after role changes as part of SyncRoleSaga.
+/// </summary>
+public record InvalidateUserCacheStepCommand
+{
+    public string CorrelationId { get; init; } = string.Empty;
+    public string UserId { get; init; } = string.Empty;
+}

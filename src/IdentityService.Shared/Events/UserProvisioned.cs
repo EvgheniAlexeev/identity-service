@@ -27,3 +27,4 @@ public record UserProvisioned : IEvent
     public string KeycloakUserId { get; init; } = string.Empty;
     public DateTime ProvisionedAt { get; init; }
 }
+// END_BLOCK_USER_PROVISIONED

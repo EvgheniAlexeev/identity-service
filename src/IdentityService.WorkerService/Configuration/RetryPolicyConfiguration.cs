@@ -16,7 +16,7 @@ namespace IdentityService.WorkerService.Configuration;
 /// <para><strong>@invariant:</strong> Configuration values have sensible defaults; validated at startup</para>
 /// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
 /// </remarks>
-record used at the service level.
+// NOTE: This configuration record is shared across ProvisionUserSaga and SyncRoleSaga.
 /// </summary>
 public record RetryPolicyConfiguration
 {

@@ -8,6 +8,7 @@
 // FILE: src/IdentityService.Api.ReaderService/Features/DependencyInjection.cs
 // VERSION: 1.0.0
 
+using FluentValidation;
 using IdentityService.Api.ReaderService.Features.GetUser;
 using IdentityService.Api.ReaderService.Features.QueryUsers;
 using Microsoft.Extensions.DependencyInjection;

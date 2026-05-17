@@ -34,7 +34,7 @@ public sealed class SagaMetrics
 
     public SagaMetrics()
     {
-        _sagaStarted = Metrics.CreateCounter(
+        _sagaStarted = Prometheus.Metrics.CreateCounter(
             "identity_saga_started_total",
             "Total number of sagas started",
             new CounterConfiguration
@@ -42,7 +42,7 @@ public sealed class SagaMetrics
                 LabelNames = new[] { "saga_type" }
             });
 
-        _sagaCompleted = Metrics.CreateCounter(
+        _sagaCompleted = Prometheus.Metrics.CreateCounter(
             "identity_saga_completed_total",
             "Total number of sagas completed successfully",
             new CounterConfiguration
@@ -50,7 +50,7 @@ public sealed class SagaMetrics
                 LabelNames = new[] { "saga_type" }
             });
 
-        _sagaFailed = Metrics.CreateCounter(
+        _sagaFailed = Prometheus.Metrics.CreateCounter(
             "identity_saga_failed_total",
             "Total number of sagas that failed",
             new CounterConfiguration
@@ -58,7 +58,7 @@ public sealed class SagaMetrics
                 LabelNames = new[] { "saga_type", "failure_cause" }
             });
 
-        _dlqPublished = Metrics.CreateCounter(
+        _dlqPublished = Prometheus.Metrics.CreateCounter(
             "identity_dlq_published_total",
             "Total number of events published to DLQ",
             new CounterConfiguration
@@ -66,15 +66,15 @@ public sealed class SagaMetrics
                 LabelNames = new[] { "failed_step" }
             });
 
-        _keycloakRetries = Metrics.CreateCounter(
+        _keycloakRetries = Prometheus.Metrics.CreateCounter(
             "identity_keycloak_retries_total",
             "Total number of Keycloak HTTP retry attempts");
 
-        _keycloakRetriesExhausted = Metrics.CreateCounter(
+        _keycloakRetriesExhausted = Prometheus.Metrics.CreateCounter(
             "identity_keycloak_retries_exhausted_total",
             "Total number of times Keycloak retries were exhausted");
 
-        _stepSuccess = Metrics.CreateCounter(
+        _stepSuccess = Prometheus.Metrics.CreateCounter(
             "identity_saga_step_success_total",
             "Total number of successful saga steps",
             new CounterConfiguration
@@ -82,7 +82,7 @@ public sealed class SagaMetrics
                 LabelNames = new[] { "step_name" }
             });
 
-        _stepFailure = Metrics.CreateCounter(
+        _stepFailure = Prometheus.Metrics.CreateCounter(
             "identity_saga_step_failure_total",
             "Total number of failed saga steps",
             new CounterConfiguration
@@ -90,7 +90,7 @@ public sealed class SagaMetrics
                 LabelNames = new[] { "step_name", "error_type" }
             });
 
-        _sagaDuration = Metrics.CreateHistogram(
+        _sagaDuration = Prometheus.Metrics.CreateHistogram(
             "identity_saga_duration_seconds",
             "Saga execution duration in seconds",
             new HistogramConfiguration
@@ -99,7 +99,7 @@ public sealed class SagaMetrics
                 Buckets = new[] { 0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0 }
             });
 
-        _stepDuration = Metrics.CreateHistogram(
+        _stepDuration = Prometheus.Metrics.CreateHistogram(
             "identity_saga_step_duration_seconds",
             "Saga step execution duration in seconds",
             new HistogramConfiguration
@@ -176,7 +176,7 @@ public sealed class SagaMetrics
     /// <summary>
     /// Record saga execution duration.
     /// </summary>
-    public ITimer RecordSagaDuration(string sagaType = "ProvisionUserSaga")
+    public Prometheus.ITimer RecordSagaDuration(string sagaType = "ProvisionUserSaga")
     {
         return _sagaDuration.WithLabels(sagaType).NewTimer();
     }
@@ -184,7 +184,7 @@ public sealed class SagaMetrics
     /// <summary>
     /// Record saga step execution duration.
     /// </summary>
-    public ITimer RecordStepDuration(string stepName)
+    public Prometheus.ITimer RecordStepDuration(string stepName)
     {
         return _stepDuration.WithLabels(stepName).NewTimer();
     }

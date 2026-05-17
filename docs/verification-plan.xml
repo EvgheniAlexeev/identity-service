@@ -178,4 +178,37 @@
       <commands>
         <command-1>dotnet test tests/IdentityService.Shared.UnitTests/</command-1>
         <command-2>dotnet test tests/IdentityService.CacheLayer.UnitTests/</command-2>
-        <command-3>dotnet test tests/IdentityService.KeycloakAdapter.UnitTests/</command-3>\n      </commands>\n    </Gate-Phase-1>\n\n    <Gate-Phase-2 PHASE=\"Phase-2\">\n      <solution>IdentityServices</solution>\n      <goal>Reader and Writer working end-to-end to MQ</goal>\n      <commands>\n        <command-1>dotnet test tests/IdentityService.Api.ReaderService.UnitTests/</command-1>\n        <command-2>dotnet test tests/IdentityService.Api.WriterService.UnitTests/</command-2>\n        <command-3>dotnet test tests/IdentityService.IntegrationTests/ --filter \"Category=Wave2\"</command-3>\n      </commands>\n    </Gate-Phase-2>\n\n    <Gate-Phase-3 PHASE=\"Phase-3\">\n      <solution>IdentityServices</solution>\n      <goal>Worker sagas, DLQ failure handling, idempotency pass all tests</goal>\n      <commands>\n        <command-1>dotnet test tests/IdentityService.WorkerService.UnitTests/</command-1>\n        <command-2>dotnet test tests/IdentityService.IntegrationTests/ --filter \"Category=Wave3\"</command-2>\n        <command-3>dotnet test tests/IdentityService.IntegrationTests/ --filter \"Category=DLQ\"</command-3>\n      </commands>\n    </Gate-Phase-3>\n\n    <Gate-Phase-4 PHASE=\"Phase-4\">\n      <solution>IdentityServices</solution>\n      <goal>K8s deployed, 500 op/s write path, cache hit ≥95%, zero loss, DLQ processing</goal>\n      <commands>\n        <command-1>kubectl apply --dry-run=client -f deploy/k8s/</command-1>\n        <command-2>dotnet run --project tests/IdentityService.LoadTests/ -- --rate 500 --duration 300 --validate-cache-hit 0.95 --validate-dlq true</command-2>\n      </commands>\n    </Gate-Phase-4>\n  </PhaseGates>\n</VerificationPlan>\n
+        <command-3>dotnet test tests/IdentityService.KeycloakAdapter.UnitTests/</command-3>
+      </commands>
+    </Gate-Phase-1>
+
+    <Gate-Phase-2 PHASE="Phase-2">
+      <solution>IdentityServices</solution>
+      <goal>Reader and Writer working end-to-end to MQ</goal>
+      <commands>
+        <command-1>dotnet test tests/IdentityService.Api.ReaderService.UnitTests/</command-1>
+        <command-2>dotnet test tests/IdentityService.Api.WriterService.UnitTests/</command-2>
+        <command-3>dotnet test tests/IdentityService.IntegrationTests/ --filter "Category=Wave2"</command-3>
+      </commands>
+    </Gate-Phase-2>
+
+    <Gate-Phase-3 PHASE="Phase-3">
+      <solution>IdentityServices</solution>
+      <goal>Worker sagas, DLQ failure handling, idempotency pass all tests</goal>
+      <commands>
+        <command-1>dotnet test tests/IdentityService.WorkerService.UnitTests/</command-1>
+        <command-2>dotnet test tests/IdentityService.IntegrationTests/ --filter "Category=Wave3"</command-2>
+        <command-3>dotnet test tests/IdentityService.IntegrationTests/ --filter "Category=DLQ"</command-3>
+      </commands>
+    </Gate-Phase-3>
+
+    <Gate-Phase-4 PHASE="Phase-4">
+      <solution>IdentityServices</solution>
+      <goal>K8s deployed, 500 op/s write path, cache hit ≥95%, zero loss, DLQ processing</goal>
+      <commands>
+        <command-1>kubectl apply --dry-run=client -f deploy/k8s/</command-1>
+        <command-2>dotnet run --project tests/IdentityService.LoadTests/ -- --rate 500 --duration 300 --validate-cache-hit 0.95 --validate-dlq true</command-2>
+      </commands>
+    </Gate-Phase-4>
+  </PhaseGates>
+</VerificationPlan>
