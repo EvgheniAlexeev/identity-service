@@ -47,6 +47,25 @@
         <log-marker>[IdentityService.KeycloakAdapter][ValidateToken][BLOCK_JWKS_CACHE_CHECK]</log-marker>
       </required-signals>
     </VF-004>
+
+    <VF-005 NAME="SyncRoleHappy" USE_CASES="UC-003" DATA_FLOW="DF-SAGA-SYNC" PRIORITY="critical">
+      <scenario>Sync role saga flows: Writer → MQ → Worker → Keycloak assign + cache update + cache invalidate → RoleSynced event</scenario>
+      <expected-outcome>Role assigned in Keycloak, role cache updated and user cache invalidated in MongoDB, saga state=Completed, RoleSynced event emitted</expected-outcome>
+      <required-signals>
+        <log-marker>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_SAGA_START]</log-marker>
+        <log-marker>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_KEYCLOAK_RESPONSE]</log-marker>
+        <log-marker>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_CACHE_RESPONSE]</log-marker>
+        <trace-sequence>BLOCK_SYNC_SAGA_START → BLOCK_SYNC_KEYCLOAK_RESPONSE → BLOCK_SYNC_CACHE_RESPONSE → COMPLETE</trace-sequence>
+      </required-signals>
+    </VF-005>
+
+    <VF-006 NAME="SyncRoleDLQOnFailure" USE_CASES="UC-003" DATA_FLOW="DF-SAGA-SYNC" PRIORITY="critical">
+      <scenario>SyncRoleSaga fails at any step (Keycloak API down, cache write failure, network timeout)</scenario>
+      <expected-outcome>Saga fails gracefully, RoleSyncFailedEvent published to DLQ with full context (original request, failed step, audit history, error), NO automatic compensation</expected-outcome>
+      <required-signals>
+        <log-marker>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_FAILURE]</log-marker>
+      </required-signals>
+    </VF-006>
   </CriticalFlows>
 
   <ModuleVerification>
@@ -117,17 +136,29 @@
         <check-2>ProvisionUserSaga happy path: Keycloak create → cache update → saga state=Provisioned</check-2>
         <check-3>DLQ on failure: FailedIdentityEvent published with original request + error context</check-3>
         <check-4>Idempotency: replay skips completed steps</check-4>
+        <check-5>SyncRoleSaga happy path: Keycloak role assign → cache update → invalidate user cache → RoleSynced</check-5>
+        <check-6>SyncRoleSaga DLQ on failure: RoleSyncFailedEvent with full audit history</check-6>
+        <check-7>SyncRoleSaga idempotency: duplicate correlationId returns RoleSynced without re-execution</check-7>
       </module-checks>
       <scenarios>
-        <scenario-1 kind="success">Valid command → saga completes, UserProvisioned event emitted, cache populated</scenario-1>
-        <scenario-2 kind="failure">Keycloak API fails → BLOCK_SAGA_FAILURE, publish to DLQ (NO compensation)</scenario-2>
-        <scenario-3 kind="replay">Replayed after partial progress → idempotency check skips already-completed steps</scenario-3>
+        <scenario-1 kind="success">ProvisionUserSaga: valid command → saga completes, UserProvisioned event emitted, cache populated</scenario-1>
+        <scenario-2 kind="failure">ProvisionUserSaga: Keycloak API fails → BLOCK_SAGA_FAILURE, publish to DLQ (NO compensation)</scenario-2>
+        <scenario-3 kind="replay">ProvisionUserSaga: replayed after partial progress → idempotency check skips already-completed steps</scenario-3>
+        <scenario-4 kind="success">SyncRoleSaga: valid SyncRoleCommand → AssignInKeycloak → UpdateRoleCache → InvalidateUserCache → RoleSynced</scenario-4>
+        <scenario-5 kind="failure">SyncRoleSaga: Keycloak assign fails → HandleFailureAsync → RoleSyncFailedEvent to DLQ with audit trail</scenario-5>
+        <scenario-6 kind="replay">SyncRoleSaga: duplicate idempotency key → idempotency check returns RoleSynced directly</scenario-6>
+        <scenario-7 kind="failure">SyncRoleSaga: cache update fails → DLQ publish with correct FailedStep and ErrorCode</scenario-7>
       </scenarios>
       <required-log-markers>
         <marker-1>[IdentityService.WorkerService][ProvisionUserHandler][BLOCK_SAGA_START]</marker-1>
         <marker-2>[IdentityService.WorkerService][ProvisionUserSaga][BLOCK_IDEMPOTENCY_CHECK]</marker-2>
         <marker-3>[IdentityService.WorkerService][ProvisionUserSaga][BLOCK_SAGA_FAILURE]</marker-3>
         <marker-4>[IdentityService.WorkerService][DLQHandler][BLOCK_PUBLISH_DLQ]</marker-4>
+        <marker-5>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_SAGA_START]</marker-5>
+        <marker-6>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_IDEMPOTENCY_CHECK]</marker-6>
+        <marker-7>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_KEYCLOAK_RESPONSE]</marker-7>
+        <marker-8>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_CACHE_RESPONSE]</marker-8>
+        <marker-9>[IdentityService.WorkerService][SyncRoleSaga][BLOCK_SYNC_FAILURE]</marker-9>
       </required-log-markers>
       <wave-follow-up>Integration: real MongoDB + real Keycloak stub (TestContainers/Mock), full saga flow + DLQ</wave-follow-up>
       <phase-follow-up>Chaos test: kill Worker pod, verify saga resumes from idempotency ledger</phase-follow-up>

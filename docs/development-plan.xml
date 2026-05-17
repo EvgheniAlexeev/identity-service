@@ -102,7 +102,7 @@
       <interface>
         <export-ProvisionUserHandler PURPOSE="Wolverine handler: starts ProvisionUserSaga" />
         <class-ProvisionUserSaga PURPOSE="Keycloak create → MongoDB cache → emit UserProvisioned" />
-        <class-SyncRoleSaga PURPOSE="Keycloak role assign → MongoDB cache invalidate → emit RoleSynced (PENDING)" />
+        <class-SyncRoleSaga PURPOSE="Keycloak role assign → MongoDB cache invalidate → emit RoleSynced (completed)" />
         <fn-CheckIdempotency PURPOSE="Idempotency ledger check" />
         <fn-Compensate PURPOSE="Revert Keycloak/MongoDB on failure" />
       </interface>
@@ -221,12 +221,12 @@
     </Phase-2>
 
     <Phase-3 name="Worker-Saga" status="in-progress">
-      <goal>Saga processing: ProvisionUserSaga (Keycloak→MongoDB) with DLQ failure handling. SyncRoleSaga (bidirectional) pending.</goal>
+      <goal>Saga processing: ProvisionUserSaga (Keycloak→MongoDB) with DLQ failure handling. SyncRoleSaga (bidirectional) completed.</goal>
       <solution name="IdentityServices">
         <step-1 module="M-WORKER" status="completed" verification="V-M-WORKER">Implement IdentityService.WorkerService: ProvisionUserSaga (Keycloak create→cache), idempotency checks.</step-1>
         <step-2 module="M-WORKER" status="completed" verification="V-M-WORKER">DLQ handler: on saga failure at any step, publish FailedIdentityEvent to DLQ with full context (original input, failed step, error, Keycloak response).</step-2>
         <step-3 module="M-WORKER" status="completed" verification="V-M-WORKER">Saga integration tests: happy path, DLQ on Keycloak API failure, idempotency replay, concurrent saga per userId isolation.</step-3>
-        <step-4 module="M-WORKER" status="pending" verification="V-M-WORKER">Implement SyncRoleSaga: bidirectional Keycloak role assign ↔ MongoDB cache invalidate with DLQ compensation.</step-4>
+        <step-4 module="M-WORKER" status="completed" verification="V-M-WORKER">Implement SyncRoleSaga: bidirectional Keycloak role assign ↔ MongoDB cache invalidate with DLQ compensation.</step-4>
       </solution>
     </Phase-3>
 

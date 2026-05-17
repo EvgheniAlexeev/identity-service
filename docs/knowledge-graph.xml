@@ -35,7 +35,7 @@
       <depends>M-SHARED, M-KEYCLOAK, M-CACHE</depends>
       <annotations>
         <class-ProvisionUserSaga PURPOSE="User provision saga: Keycloak → MongoDB" />
-        <class-SyncRoleSaga PURPOSE="Role sync saga: bidirectional Keycloak ↔ MongoDB (PENDING)" />
+        <class-SyncRoleSaga PURPOSE="Role sync saga: bidirectional Keycloak ↔ MongoDB (completed)" />
       </annotations>
     </M-WORKER>
 

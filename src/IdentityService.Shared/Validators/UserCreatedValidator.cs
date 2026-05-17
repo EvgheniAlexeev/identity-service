@@ -68,7 +68,6 @@ public class UserCreatedValidator : AbstractValidator<UserCreatedDto>
     /// <para><strong>@log-event:</strong> shared.validator.user-validate-failed {userId} {errors}</para>
     /// <para><strong>@trace-span:</strong> shared.validate-user</para>
     /// <para><strong>@complexity:</strong> O(1) (field validation)</para>
-    /// <para><strong>@idempotent:</strong> YES</para>
     /// <para><strong>@pure:</strong> YES</para>
     /// </remarks>
     public new async Task<FluentValidation.Results.ValidationResult> ValidateAsync(
