@@ -16,8 +16,9 @@ namespace IdentityService.WorkerService.Configuration;
 /// <para><strong>@invariant:</strong> Configuration values have sensible defaults; validated at startup</para>
 /// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
 /// </remarks>
-// NOTE: This configuration record is shared across ProvisionUserSaga and SyncRoleSaga.
-/// </summary>
+/// <remarks>
+/// <para><strong>@note:</strong> This configuration record is shared across ProvisionUserSaga and SyncRoleSaga.</para>
+/// </remarks>
 public record RetryPolicyConfiguration
 {
     public int MaxRetries { get; init; } = 3;

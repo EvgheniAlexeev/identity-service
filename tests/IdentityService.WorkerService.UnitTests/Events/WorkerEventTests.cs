@@ -1,5 +1,6 @@
 using FluentAssertions;
 using IdentityService.WorkerService.Events;
+using IdentityService.WorkerService.Steps;
 using Xunit;
 
 namespace IdentityService.WorkerService.UnitTests.Events;
@@ -24,7 +25,7 @@ public class WorkerEventTests
     }
 
     [Fact]
-    public async Task UserCreatedInKeycloak_Should_Store_All_Properties()
+    public void UserCreatedInKeycloak_Should_Store_All_Properties()
     {
         var evt = new UserCreatedInKeycloak
         {
@@ -48,7 +49,7 @@ public class WorkerEventTests
     }
 
     [Fact]
-    public async Task CacheUpdated_Should_Initialize_With_Defaults()
+    public void CacheUpdated_Should_Initialize_With_Defaults()
     {
         var evt = new CacheUpdated();
 
@@ -57,7 +58,7 @@ public class WorkerEventTests
     }
 
     [Fact]
-    public async Task CacheUpdated_Should_Store_All_Properties()
+    public void CacheUpdated_Should_Store_All_Properties()
     {
         var now = DateTime.UtcNow;
         var evt = new CacheUpdated
@@ -75,7 +76,7 @@ public class WorkerEventTests
     [Fact]
     public void SagaStepCommands_CreateUser_Should_Have_Sensible_Defaults()
     {
-        var cmd = new Steps.CreateUserInKeycloakCommand
+        var cmd = new CreateUserInKeycloakCommand
         {
             CorrelationId = "corr-1",
             User = new IdentityService.Shared.Dtos.UserCreatedDto
@@ -96,7 +97,7 @@ public class WorkerEventTests
     [Fact]
     public void SagaStepCommands_UpdateCache_Should_Have_Sensible_Defaults()
     {
-        var cmd = new Steps.UpdateUserCacheCommand
+        var cmd = new UpdateUserCacheCommand
         {
             CorrelationId = "corr-1",
             UserId = "user-1",
@@ -116,7 +117,7 @@ public class WorkerEventTests
     [Fact]
     public void SagaStepCommands_Notify_Should_Have_Sensible_Defaults()
     {
-        var cmd = new Steps.NotifyCommand
+        var cmd = new NotifyCommand
         {
             CorrelationId = "corr-1",
             UserId = "user-1",

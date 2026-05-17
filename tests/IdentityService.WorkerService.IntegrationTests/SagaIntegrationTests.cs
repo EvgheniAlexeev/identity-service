@@ -1,5 +1,6 @@
 using FluentAssertions;
 using IdentityService.CacheLayer.MongoDB;
+using MongoDB.Bson;
 using IdentityService.CacheLayer.Repositories;
 using IdentityService.KeycloakAdapter.Admin;
 using IdentityService.KeycloakAdapter.Models;

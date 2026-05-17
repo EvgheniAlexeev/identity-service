@@ -91,7 +91,7 @@ public class DlqIntegrationTests
     }
 
     [Fact]
-    public async Task DlqEvent_Disposition_Mapping_Should_Be_Correct()
+    public void DlqEvent_Disposition_Mapping_Should_Be_Correct()
     {
         // Each cause maps to a specific disposition for operator review
         var expectedDispositions = new Dictionary<IdentityFailureCause, string>

@@ -67,12 +67,12 @@ public class ProvisionUserSaga
     /// <para><strong>@log-event:</strong> worker.saga.provision-start {correlationId} {userId}</para>
     /// <para><strong>@log-event:</strong> worker.saga.idempotency-check {correlationId}</para>
     /// <para><strong>@trace-span:</strong> worker.saga.provision-start</para>
-    /// <para><strong>@pre-condition:</strong> command != null && command.IdempotencyKey != null</para>
-    /// <para><strong>@post-condition:</strong> Data.CorrelationId != null && Data.Status == "Provisioning"</para>
+    /// <para><strong>@pre-condition:</strong> command != null &amp;&amp; command.IdempotencyKey != null</para>
+    /// <para><strong>@post-condition:</strong> Data.CorrelationId != null &amp;&amp; Data.Status == "Provisioning"</para>
     /// <para><strong>@complexity:</strong> O(1)</para>
     /// <para><strong>@idempotent:</strong> YES (ledger-based via audit history)</para>
     /// </remarks>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         ProvisionUserCommand command,
         CancellationToken ct)
     {
@@ -102,7 +102,7 @@ public class ProvisionUserSaga
                 "Duplicate command detected for {CorrelationId} — saga already completed",
                 Data.CorrelationId);
 
-            return new UserProvisioned
+            return Task.FromResult<object>(new UserProvisioned
             {
                 CorrelationId = Data.CorrelationId,
                 UserId = Data.UserId,
@@ -110,7 +110,7 @@ public class ProvisionUserSaga
                 AssignedRoles = Data.User.InitialRoles ?? new(),
                 KeycloakUserId = Data.KeycloakUserId ?? string.Empty,
                 ProvisionedAt = DateTime.UtcNow
-            };
+            });
         }
         // END_BLOCK_IDEMPOTENCY_CHECK
 
@@ -121,7 +121,7 @@ public class ProvisionUserSaga
             Attempt = 1
         };
 
-        return stepCommand;
+        return Task.FromResult<object>(stepCommand);
     }
     // END_BLOCK_SAGA_START
 
@@ -137,11 +137,11 @@ public class ProvisionUserSaga
     /// <para><strong>@return:</strong> UpdateUserCacheCommand for next step</para>
     /// <para><strong>@log-event:</strong> worker.saga.keycloak-response {correlationId} {keycloakUserId}</para>
     /// <para><strong>@trace-span:</strong> worker.saga.keycloak-response</para>
-    /// <para><strong>@pre-condition:</strong> @event != null && @event.KeycloakUserId != null</para>
+    /// <para><strong>@pre-condition:</strong> @event != null &amp;&amp; @event.KeycloakUserId != null</para>
     /// <para><strong>@post-condition:</strong> Data.CurrentStep == "UpdateCache"</para>
     /// <para><strong>@idempotent:</strong> YES</para>
     /// </remarks>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         UserCreatedInKeycloak @event,
         CancellationToken ct)
     {
@@ -171,7 +171,7 @@ public class ProvisionUserSaga
             Roles = @event.Roles
         };
 
-        return cacheCommand;
+        return Task.FromResult<object>(cacheCommand);
     }
     // END_BLOCK_SAGA_KEYCLOAK_RESPONSE
 
@@ -189,7 +189,7 @@ public class ProvisionUserSaga
     /// <para><strong>@trace-span:</strong> worker.saga.cache-response</para>
     /// <para><strong>@idempotent:</strong> YES</para>
     /// </remarks>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         CacheUpdated @event,
         CancellationToken ct)
     {
@@ -214,7 +214,7 @@ public class ProvisionUserSaga
             Status = "Provisioned"
         };
 
-        return notifyCommand;
+        return Task.FromResult<object>(notifyCommand);
     }
     // END_BLOCK_SAGA_CACHE_RESPONSE
 
@@ -223,7 +223,7 @@ public class ProvisionUserSaga
     /// Saga completion handler: marks saga as Provisioned, records final audit,
     /// emits UserProvisioned event, and increments completion metrics.
     /// </summary>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         NotifyCommand completedCommand,
         CancellationToken ct)
     {
@@ -253,7 +253,7 @@ public class ProvisionUserSaga
             ProvisionedAt = DateTime.UtcNow
         };
 
-        return provisionedEvent;
+        return Task.FromResult<object>(provisionedEvent);
     }
     // END_BLOCK_SAGA_COMPLETE
 
@@ -267,7 +267,7 @@ public class ProvisionUserSaga
     /// - Full audit history
     /// No automatic compensation — manual DLQ review by operators.
     /// </summary>
-    public async Task<object> HandleFailureAsync(
+    public Task<object> HandleFailureAsync(
         Exception exception,
         CancellationToken ct)
     {
@@ -319,7 +319,7 @@ public class ProvisionUserSaga
         };
         // END_BLOCK_PUBLISH_DLQ
 
-        return dlqEvent;
+        return Task.FromResult<object>(dlqEvent);
     }
     // END_BLOCK_SAGA_FAILURE
 }

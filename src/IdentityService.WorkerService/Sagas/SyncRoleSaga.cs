@@ -56,7 +56,7 @@ public class SyncRoleSaga
     /// Saga entry point: receives SyncRoleCommand and starts the role sync orchestration.
     /// Sets up initial saga state and dispatches the Keycloak assign step.
     /// </summary>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         SyncRoleCommand command,
         CancellationToken ct)
     {
@@ -87,13 +87,13 @@ public class SyncRoleSaga
                 "Duplicate command detected for {CorrelationId} — saga already completed",
                 Data.CorrelationId);
 
-            return new RoleSynced
+            return Task.FromResult<object>(new RoleSynced
             {
                 CorrelationId = Data.CorrelationId,
                 RoleId = Data.Role.RoleId,
                 RoleName = Data.Role.RoleName,
                 SyncedAt = DateTime.UtcNow
-            };
+            });
         }
         // END_BLOCK_SYNC_IDEMPOTENCY_CHECK
 
@@ -107,7 +107,7 @@ public class SyncRoleSaga
             Attempt = 1
         };
 
-        return stepCommand;
+        return Task.FromResult<object>(stepCommand);
     }
     // END_BLOCK_SYNC_SAGA_START
 
@@ -117,7 +117,7 @@ public class SyncRoleSaga
     /// On success: proceeds to UpdateRoleCache step.
     /// On failure: handled by HandleFailureAsync.
     /// </summary>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         RoleAssignedInKeycloak @event,
         CancellationToken ct)
     {
@@ -143,7 +143,7 @@ public class SyncRoleSaga
             Permissions = @event.Permissions
         };
 
-        return cacheCommand;
+        return Task.FromResult<object>(cacheCommand);
     }
     // END_BLOCK_SYNC_KEYCLOAK_RESPONSE
 
@@ -153,7 +153,7 @@ public class SyncRoleSaga
     /// On success: proceeds to InvalidateUserCache step.
     /// On failure: handled by HandleFailureAsync.
     /// </summary>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         RoleCacheUpdated @event,
         CancellationToken ct)
     {
@@ -176,7 +176,7 @@ public class SyncRoleSaga
             UserId = Data.UserId
         };
 
-        return invalidateCommand;
+        return Task.FromResult<object>(invalidateCommand);
     }
     // END_BLOCK_SYNC_CACHE_RESPONSE
 
@@ -184,7 +184,7 @@ public class SyncRoleSaga
     /// <summary>
     /// Saga completion handler: marks saga as Completed, emits RoleSynced event.
     /// </summary>
-    public async Task<object> HandleAsync(
+    public Task<object> HandleAsync(
         InvalidateUserCacheStepCommand completedCommand,
         CancellationToken ct)
     {
@@ -212,7 +212,7 @@ public class SyncRoleSaga
             SyncedAt = DateTime.UtcNow
         };
 
-        return syncedEvent;
+        return Task.FromResult<object>(syncedEvent);
     }
     // END_BLOCK_SYNC_COMPLETE
 
@@ -226,7 +226,7 @@ public class SyncRoleSaga
     /// - Full audit history
     /// No automatic compensation — manual DLQ review by operators.
     /// </summary>
-    public async Task<object> HandleFailureAsync(
+    public Task<object> HandleFailureAsync(
         Exception exception,
         CancellationToken ct)
     {
@@ -276,7 +276,7 @@ public class SyncRoleSaga
             Cause = failureCause
         };
 
-        return failedEvent;
+        return Task.FromResult<object>(failedEvent);
     }
     // END_BLOCK_SYNC_FAILURE
 }

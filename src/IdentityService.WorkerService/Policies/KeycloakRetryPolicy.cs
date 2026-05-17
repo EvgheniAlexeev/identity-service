@@ -24,7 +24,7 @@ namespace IdentityService.WorkerService.Policies;
 /// <para><strong>@invariant:</strong> Retry policies respect exponential backoff with jitter</para>
 /// <para><strong>@verification-ref:</strong> V-M-WORKER</para>
 /// </remarks>
-static class KeycloakRetryPolicy
+public static class KeycloakRetryPolicy
 {
     /// <summary>
     /// Configures Polly retry policies on Keycloak HttpClients.

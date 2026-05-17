@@ -197,7 +197,7 @@ public class KeycloakAdminClientTests
     }
 
     [Fact]
-    public async Task KeycloakException_Should_Store_StatusCode()
+    public void KeycloakException_Should_Store_StatusCode()
     {
         var ex = new KeycloakException("Test error", 500);
         ex.StatusCode.Should().Be(500);

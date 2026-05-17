@@ -13,4 +13,4 @@ builder.Services.AddWorkerService(builder.Configuration);
 
 var host = builder.Build();
 await host.RunAsync();
-// END_BLOCK_MODULE
+
