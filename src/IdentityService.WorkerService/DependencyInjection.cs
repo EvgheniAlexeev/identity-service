@@ -1,5 +1,5 @@
 // FILE: DependencyInjection.cs
-// VERSION: 2.0.0
+// VERSION: 2.1.0
 // MODULE: M-IDENTITY-WORKER
 // PURPOSE: M-IDENTITY-WORKER component
 // SEMANTIC_TAG: [SERVICE, BUSINESS_LOGIC]
@@ -45,7 +45,10 @@ public static class DependencyInjection
         services.AddScoped<ProvisionUserSaga>();
 
         // ---- WOLVERINE (in-memory for unit tests, replace with Dapr for production) ----
-        services.AddWolverine(opts =>
+        // Guard: AddWolverine can only be called once per service collection (Wolverine constraint).
+        if (!services.Any(sd => sd.ServiceType == typeof(WolverineOptions)))
+        {
+            services.AddWolverine(opts =>
         {
             // Register saga and handlers
             opts.Discovery.IncludeType<ProvisionUserSaga>();
@@ -53,6 +56,7 @@ public static class DependencyInjection
             opts.Discovery.IncludeType<UpdateUserCacheHandler>();
             opts.Discovery.IncludeType<NotifyAdminsHandler>();
         });
+        }
 
         return services;
     }
