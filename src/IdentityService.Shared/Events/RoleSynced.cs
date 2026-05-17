@@ -24,3 +24,4 @@ public record RoleSynced : IEvent
     public List<string> Permissions { get; init; } = new();
     public DateTime SyncedAt { get; init; }
 }
+// END_BLOCK_ROLE_SYNCED

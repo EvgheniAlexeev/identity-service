@@ -1,31 +1,30 @@
-// FILE: FailedIdentityEvent.cs
-// VERSION: 2.0.0
+// FILE: RoleSyncFailedEvent.cs
+// VERSION: 1.0.0
 // MODULE: M-SHARED
-// PURPOSE: Domain event (M-IDENTITY-SHARED)
-// SEMANTIC_TAG: [EVENT, MESSAGE]
-// START_MODULE M_IDENTITY_SHARED
+// PURPOSE: DLQ event for role sync saga failures
 
 using IdentityService.Shared.Dtos;
+using IdentityService.Shared.Events;
 
 namespace IdentityService.Shared.Events;
 
 /// <summary>
-/// <para><strong>@contract:</strong> M-IDENTITY-SHARED</para>
-/// <para><strong>@version:</strong> 2.1.0</para>
-/// <para><strong>@since:</strong> 2.0.0</para>
-/// <para><strong>@purpose:</strong> DLQ pattern event preserving original request for manual intervention and replay</para>
-/// <para><strong>@invariant:</strong> OriginalRequest must be non-null for replay capability</para>
-/// <para><strong>@invariant:</strong> ErrorReason must be descriptive</para>
-/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
+/// DLQ pattern event for SyncRoleSaga failures. Preserves original role assignment request
+/// for manual intervention and replay. Mirrors FailedIdentityEvent but for role operations.
 /// </summary>
-// START_BLOCK_FAILED_IDENTITY
-public record FailedIdentityEvent : IEvent
+/// <remarks>
+/// <para><strong>@contract:</strong> M-SHARED</para>
+/// <para><strong>@purpose:</strong> DLQ event preserving role sync failure context for operator review and replay</para>
+/// <para><strong>@invariant:</strong> OriginalRequest must be non-null for replay capability</para>
+/// <para><strong>@verification-ref:</strong> V-M-SHARED</para>
+/// </remarks>
+public record RoleSyncFailedEvent : IEvent
 {
     public string CorrelationId { get; init; } = string.Empty;
 
     public string UserId { get; init; } = string.Empty;
 
-    public UserCreatedDto OriginalRequest { get; init; } = new();
+    public RoleAssignDto OriginalRequest { get; init; } = new();
 
     public string FailedStep { get; init; } = string.Empty;
 
@@ -39,4 +38,3 @@ public record FailedIdentityEvent : IEvent
 
     public IdentityFailureCause Cause { get; init; }
 }
-// END_BLOCK_FAILED_IDENTITY

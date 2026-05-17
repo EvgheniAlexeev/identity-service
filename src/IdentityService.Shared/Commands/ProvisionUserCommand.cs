@@ -29,3 +29,4 @@ public record ProvisionUserCommand : ICommand
 /// Marker interface for Wolverine commands in the identity domain.
 /// </summary>
 public interface ICommand { }
+// END_BLOCK_PROVISION_USER

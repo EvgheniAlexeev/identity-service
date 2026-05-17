@@ -24,3 +24,4 @@ public record SyncRoleCommand : ICommand
 
     public RoleAssignDto Role { get; init; } = new();
 }
+// END_BLOCK_SYNC_ROLE
