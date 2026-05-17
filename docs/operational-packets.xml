@@ -1,0 +1,150 @@
+<OperationalPackets VERSION="0.1.0">
+  <ExecutionPacketTemplate>
+    <!-- Canonical controller-to-worker execution packet for identity-service. -->
+    <ExecutionPacket>
+      <module-id>M-EXAMPLE</module-id>
+      <module-name>IdentityService.Api.EXAMPLE</module-name>
+      <purpose>Implement the approved module without architectural drift.</purpose>
+      <write-scope>
+        <file-1>src/IdentityService.Example/</file-1>
+        <file-2>tests/IdentityService.Example.UnitTests/</file-2>
+      </write-scope>
+      <contract-excerpt><![CDATA[
+Planned module contract excerpt from docs/development-plan.xml.
+      ]]></contract-excerpt>
+      <graph-entry-excerpt><![CDATA[
+Knowledge graph entry excerpt from docs/knowledge-graph.xml.
+      ]]></graph-entry-excerpt>
+      <dependency-contract-summaries>
+        <dependency-1 module="M-SHARED">Shared DTOs, events, commands (IdentityService.Shared).</dependency-1>
+        <dependency-2 module="M-CACHE">MongoDB user/role cache with TTL (IdentityService.CacheLayer).</dependency-2>
+        <dependency-3 module="M-KEYCLOAK">Keycloak admin API client + JWT validator (IdentityService.KeycloakAdapter).</dependency-3>
+      </dependency-contract-summaries>
+      <verification-excerpt><![CDATA[
+Verification-plan excerpt from docs/verification-plan.xml.
+      ]]></verification-excerpt>
+      <assumptions>
+        <assumption-1>Dapr 1.15 sidecar injected; DaprClient registered in DI.</assumption-1>
+        <assumption-2>Wolverine (Worker only) configured with in-memory saga persistence for dev.</assumption-2>
+        <assumption-3>FluentValidation registered as pipeline behavior where needed.</assumption-3>
+        <assumption-4>MongoDB replica-set available for transactional writes in integration tests.</assumption-4>
+        <assumption-5>Keycloak admin API accessible with configured credentials.</assumption-5>
+      </assumptions>
+      <stop-conditions>
+        <condition-1>Stop if new external dependency required beyond approved stack.</condition-1>
+        <condition-2>Stop if Dapr/Wolverine/Keycloak API surface unclear.</condition-2>
+        <condition-3>Stop if contract requires modifying shared DTOs without review.</condition-3>
+      </stop-conditions>
+      <retry-budget>2</retry-budget>
+      <checkpoint-fields>
+        <field-1>assumptions-kept</field-1>
+        <field-2>commands-run</field-2>
+        <field-3>evidence-captured</field-3>
+        <field-4>next-action</field-4>
+      </checkpoint-fields>
+      <expected-graph-delta-fields>
+        <field-1>imports</field-1>
+        <field-2>exports</field-2>
+        <field-3>annotations</field-3>
+        <field-4>CrossLinks</field-4>
+      </expected-graph-delta-fields>
+      <expected-verification-delta-fields>
+        <field-1>test-files</field-1>
+        <field-2>module-checks</field-2>
+        <field-3>required-log-markers</field-3>
+        <field-4>follow-up-checks</field-4>
+      </expected-verification-delta-fields>
+      <notes>
+        <note-1>Workers should only read more context when the packet is insufficient.</note-1>
+        <note-2>Pre-commit hook enforces Phase-3 Doxygen 4-tag format. Run `python3 ../grace-tooling/grace-lint-phase3.py src --output text` to check.</note-2>
+      </notes>
+    </ExecutionPacket>
+  </ExecutionPacketTemplate>
+
+  <GraphDeltaTemplate>
+    <!-- Canonical worker-to-controller graph delta for identity-service. -->
+    <GraphDelta module="M-EXAMPLE">
+      <imports-added>
+        <import-1>M-SHARED</import-1>
+      </imports-added>
+      <imports-removed />
+      <exports-added>
+        <export-1>runExample</export-1>
+      </exports-added>
+      <exports-removed />
+      <annotations-added>
+        <annotation-1>&lt;fn-runExample PURPOSE="Execute the example flow" /&gt;</annotation-1>
+      </annotations-added>
+      <annotations-removed />
+      <cross-links-added>
+        <CrossLink from="M-EXAMPLE" to="M-SHARED" relation="uses" />
+      </cross-links-added>
+      <cross-links-removed />
+      <notes>
+        <note-1>Only list graph facts that really changed in the code.</note-1>
+      </notes>
+    </GraphDelta>
+  </GraphDeltaTemplate>
+
+  <VerificationDeltaTemplate>
+    <!-- Canonical worker-to-controller verification delta for identity-service. -->
+    <VerificationDelta module="M-EXAMPLE">
+      <test-files-added>
+        <file-1>tests/IdentityService.Example.UnitTests/</file-1>
+      </test-files-added>
+      <test-files-removed />
+      <module-checks>
+        <command-1>dotnet test tests/IdentityService.Example.UnitTests/</command-1>
+      </module-checks>
+      <required-log-markers>
+        <marker-1>[IdentityService.Example][runExample][BLOCK_EXECUTE_FLOW]</marker-1>
+      </required-log-markers>
+      <required-trace-assertions>
+        <assertion-1>Failure path must not emit BLOCK_PERSIST_RESULT.</assertion-1>
+      </required-trace-assertions>
+      <wave-follow-up>
+        <item-1>Run merged-surface integration check for all changed modules.</item-1>
+        <item-2>Run `python3 ../grace-tooling/grace-lint-phase3.py src --output text`.</item-2>
+      </wave-follow-up>
+      <phase-follow-up>
+        <item-1>Run full regression suite before marking the phase done.</item-1>
+      </phase-follow-up>
+    </VerificationDelta>
+  </VerificationDeltaTemplate>
+
+  <FailurePacketTemplate>
+    <!-- Canonical verification-to-fixer failure handoff for identity-service. -->
+    <FailurePacket>
+      <scenario>Primary success path fails on valid input.</scenario>
+      <contract-ref>M-EXAMPLE / V-M-EXAMPLE / scenario-1</contract-ref>
+      <expected-evidence>
+        <marker-1>[IdentityService.Example][runExample][BLOCK_VALIDATE_INPUT]</marker-1>
+        <assertion-1>Expected return value should equal "ok".</assertion-1>
+      </expected-evidence>
+      <observed-evidence>
+        <log-1>[IdentityService.Example][runExample][BLOCK_VALIDATE_INPUT] emitted</log-1>
+        <trace-1>BLOCK_VALIDATE_INPUT -> threw EXAMPLE_INVALID_STATE</trace-1>
+      </observed-evidence>
+      <first-divergent-block>BLOCK_VALIDATE_INPUT</first-divergent-block>
+      <suggested-next-action>Read the contract, inspect the divergent block, and apply the smallest safe fix. Re-run `python3 ../grace-tooling/grace-lint-phase3.py src --output text`.</suggested-next-action>
+    </FailurePacket>
+  </FailurePacketTemplate>
+
+  <CheckpointReportTemplate>
+    <!-- Canonical worker or controller checkpoint report for identity-service. -->
+    <CheckpointReport>
+      <scope>M-EXAMPLE / step-N</scope>
+      <assumptions-kept>
+        <item-1>Dependency contracts matched the packet.</item-1>
+      </assumptions-kept>
+      <commands-run>
+        <command-1>dotnet test tests/IdentityService.Example.UnitTests/</command-1>
+      </commands-run>
+      <evidence-captured>
+        <item-1>[IdentityService.Example][runExample][BLOCK_EXECUTE_FLOW] emitted once.</item-1>
+      </evidence-captured>
+      <retry-budget-used>0</retry-budget-used>
+      <next-action>Ready for shared-artifact sync.</next-action>
+    </CheckpointReport>
+  </CheckpointReportTemplate>
+</OperationalPackets>
