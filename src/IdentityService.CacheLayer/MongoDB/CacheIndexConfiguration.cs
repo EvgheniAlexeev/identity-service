@@ -39,7 +39,6 @@ public static class CacheIndexConfiguration
     /// <para><strong>@log-event:</strong> cache.index.ensure-complete</para>
     /// <para><strong>@trace-span:</strong> cache.index.ensure</para>
     /// <para><strong>@complexity:</strong> O(1) (per-collection index creation)</para>
-    /// <para><strong>@idempotent:</strong> YES</para>
     /// </remarks>
     public static async Task EnsureIndexesAsync(IMongoDatabase database)
     {
