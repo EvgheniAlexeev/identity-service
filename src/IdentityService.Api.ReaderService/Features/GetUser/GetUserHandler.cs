@@ -8,6 +8,7 @@
 // FILE: src/IdentityService.Api.ReaderService/Features/GetUser/GetUserHandler.cs
 // VERSION: 1.0.0
 
+using IdentityService.Api.ReaderService.Models;
 using IdentityService.CacheLayer.Repositories;
 using IdentityService.Shared.Dtos;
 using Microsoft.Extensions.Logging;
